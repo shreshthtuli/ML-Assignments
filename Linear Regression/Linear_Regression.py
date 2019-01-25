@@ -16,7 +16,7 @@ import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d import axes3d
 import time
-from random import shuffle
+from random import shuffle, random
 
 # Global variables
 iteration = 0
@@ -31,15 +31,15 @@ def analytical_solution(X, Y):
 
 ''' To Read the X values '''
 def Xread():
-	return np.matrix([map(float, line.strip().split()) for line in open('x.dat')])
+	return np.matrix([map(float, line.strip().split()) for line in open('linearX.csv')])
 
 ''' To Read the Y values '''
 def Yread():
-	return np.matrix([[float(line.strip())] for line in open('y.dat')])
+	return np.matrix([[float(line.strip())] for line in open('linearY.csv')])
  
 ''' To create a theta vector based on dimension of input '''
 def initialize_theta(x):
-	return np.matrix([[float(-np.random.randint(20))]] * (x))
+	return np.matrix([[float(random())]] * (x))
 
 ''' Returns the value of J(theta) '''
 def create_J(X, Y, Theta):
@@ -52,6 +52,12 @@ def create_gradJ(X, Y, Theta):
 ''' Returns the gradient of J(theta) '''
 def create_gradJ_sgd(X, Y, Theta, i):
 	return X[i].T * ((X[i] * Theta) - Y[i]) 
+
+''' Returns normalised data '''
+def normalise(X):
+	var = np.linalg.norm(X)
+	mean = np.linalg.mean(X)
+	return (X - mean) / var
 
 ''' The Gradient Descent Algorithm '''
 def gradient_descent(X, Y):
@@ -168,25 +174,26 @@ x = np.arange(min(X_plot)-1, max(X_plot)+1, 0.1)
 fig = plt.figure(figsize=(30, 30))
 
 A = []; B = []; C = []
-theta_0_plot = np.arange(-15, 20, 0.5)
-theta_1_plot = np.arange(-15, 20, 0.5)
+theta_0_plot = np.arange(-0.5, 2.5, 0.1)
+theta_1_plot = np.arange(-1, 1, 0.1)
 theta_0_plot, theta_1_plot = np.meshgrid(theta_0_plot, theta_1_plot)
 Z = np.vectorize(create_J_plot)(theta_0_plot, theta_1_plot)
 ax3 = fig.add_subplot(2, 2, 3, projection='3d')
 ax3.plot_surface(theta_0_plot, theta_1_plot, Z, rstride=1, cstride=1, alpha=0.3, linewidth=0.1, cmap=cm.coolwarm)
-ax3.set_zlim(-50, 50)
+ax3.set_zlim(0, 2)
 
 
 # Plot
 for index in range(iteration+1):
 	line = Saved_Theta[index]
+	# print line[0],line[1],line[2]
 	plt.subplot(2, 2, 1)	
 	plt.plot(X_plot, Y_plot, 'ro')
 	ln, = plt.plot(x, linear2(line, x))
-	plt.axis([min(X_plot)-0.2, max(X_plot)+0.2, min(Y_plot)-0.2, max(Y_plot)+0.2])
-	plt.ylabel('Prices')
-	plt.xlabel('Area')
-	plt.title('House Prices')
+	plt.axis([min(X_plot)-0.1*np.std(X_plot), max(X_plot)+0.1*np.std(X_plot), min(Y_plot)-0.1*np.std(Y_plot), max(Y_plot)+0.1*np.std(Y_plot)])
+	plt.ylabel('Density')
+	plt.xlabel('Acidity')
+	plt.title('Wine density with Acidity')
 
 	plt.subplot(2, 2, 2)
 	ln2, = plt.plot(range(1, index), Saved_J[1:index:1], '')
