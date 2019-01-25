@@ -14,7 +14,6 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
-from mpl_toolkits.mplot3d import axes3d
 import time
 from random import shuffle, random
 
@@ -39,7 +38,7 @@ def Yread():
  
 ''' To create a theta vector based on dimension of input '''
 def initialize_theta(x):
-	return np.matrix([[float(random())]] * (x))
+	return np.matrix([[float(0)]] * (x))
 
 ''' Returns the value of J(theta) '''
 def create_J(X, Y, Theta):
@@ -135,10 +134,10 @@ def create_J_plot(Theta_0, Theta_1):
 	return ((Y - X * Theta).T * (Y - X * Theta) / (2*X.shape[0])).item(0)
 
 # Read input values
-X = Xread()
+X_orig = Xread()
 Y = Yread()
 
-print ("Number of examples : %s" % X.shape[0])
+print ("Number of examples : %s" % X_orig.shape[0])
 
 # Take learning rate from user
 print("Enter Learning rate : "),
@@ -149,8 +148,9 @@ print("Enter 0 for BGD and 1 for SGD : "),
 option = input()
 
 # Normalize
-X_mean = np.mean(X, axis=0)
-X_std = np.std(X, axis=0)
+X = X_orig
+X_mean = np.mean(X_orig, axis=0)
+X_std = np.std(X_orig, axis=0)
 X = (X - X_mean)/X_std
 X = np.c_[np.ones((X.shape[0], 1)), X]
 
@@ -169,18 +169,18 @@ print 'Iterations used = ', iteration
 ### 2D plot of the hypothesis function ###
 X_plot = [item[1] for item in X.tolist()]
 Y_plot = [item[0] for item in Y.tolist()]
-x = np.arange(min(X_plot)-1, max(X_plot)+1, 0.1)
+x = np.array(X_plot)
 
 fig = plt.figure(figsize=(30, 30))
 
 A = []; B = []; C = []
-theta_0_plot = np.arange(-0.5, 2.5, 0.1)
-theta_1_plot = np.arange(-1, 1, 0.1)
+theta_0_plot = np.linspace(-0.25, 2, 100)
+theta_1_plot = np.linspace(-1, 1, 100)
 theta_0_plot, theta_1_plot = np.meshgrid(theta_0_plot, theta_1_plot)
 Z = np.vectorize(create_J_plot)(theta_0_plot, theta_1_plot)
 ax3 = fig.add_subplot(2, 2, 3, projection='3d')
 ax3.plot_surface(theta_0_plot, theta_1_plot, Z, rstride=1, cstride=1, alpha=0.3, linewidth=0.1, cmap=cm.coolwarm)
-ax3.set_zlim(0, 2)
+ax3.set_zlim(min(Saved_J), max(Saved_J))
 
 
 # Plot
@@ -188,9 +188,9 @@ for index in range(iteration+1):
 	line = Saved_Theta[index]
 	# print line[0],line[1],line[2]
 	plt.subplot(2, 2, 1)	
-	plt.plot(X_plot, Y_plot, 'ro')
-	ln, = plt.plot(x, linear2(line, x))
-	plt.axis([min(X_plot)-0.1*np.std(X_plot), max(X_plot)+0.1*np.std(X_plot), min(Y_plot)-0.1*np.std(Y_plot), max(Y_plot)+0.1*np.std(Y_plot)])
+	plt.plot(X_orig, Y_plot, 'ro')
+	ln, = plt.plot(X_orig, linear2(line, x))
+	plt.axis([min(X_orig)-0.1*np.std(X_orig), max(X_orig)+0.1*np.std(X_orig), min(Y_plot)-0.1*np.std(Y_plot), max(Y_plot)+0.1*np.std(Y_plot)])
 	plt.ylabel('Density')
 	plt.xlabel('Acidity')
 	plt.title('Wine density with Acidity')
@@ -203,7 +203,7 @@ for index in range(iteration+1):
 	index = index + 1
 
 	A.append(line[0]); B.append(line[1]); C.append(line[2])
-	# wframe = ax3.plot_wireframe(A, B, C, rstride=1, cstride=1)
+	wframe, = ax3.plot(A, B, C)
 	point = ax3.plot([line[0]],[line[1]],[line[2]], 'r.')
 
 	plt.subplot(2, 2, 4)
@@ -218,5 +218,12 @@ for index in range(iteration+1):
 		break
 	ln.remove()
 	ln2.remove()
+	wframe.remove()
 
-plt.show()
+gd = ''
+if option == 0:
+	gd = "BGD"
+else:
+	gd = "SGD"
+
+plt.savefig('Linear-regression-'+gd+'-'+str(LearningRate)+'.png')
