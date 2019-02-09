@@ -57,9 +57,7 @@ def gradJ_sgd(X, Y, Theta, i):
 
 # Returns normalised numpy array
 def normalise(X):
-	X_mean = np.mean(X_orig, axis=0)
-	X_std = np.std(X_orig, axis=0)
-	return (X - X_mean)/X_std
+	return (X - np.mean(X, axis=0))/np.std(X, axis=0)
 
 def boundary_line(x, Theta):
 	return (-Theta.item(1)*x-Theta.item(0))/Theta.item(2)
