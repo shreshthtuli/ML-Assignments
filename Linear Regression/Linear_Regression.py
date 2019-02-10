@@ -20,7 +20,7 @@ from random import shuffle, random
 # Variables used in learing algorithm
 iteration = 0
 LearningRate = 0.1
-Epsilon = 1e-30
+Epsilon = 1e-20
 history = []
 Saved_J = []
 
@@ -90,9 +90,10 @@ def gradient_descent(X, Y):
 		newJ = J(X, Y, newTheta)
 		Theta = newTheta
 		t += (time.time() - start_time)
-		if j - newJ < Epsilon: 	# Value has converged
+		# print math.fabs(j - newJ)
+		if math.fabs(j - newJ) < Epsilon or newJ - j > 0.5: 	# Value has converged/diverged
 			k+=1
-			if k > 10:
+			if k > 3:
 				break
 		else:
 			k = 0

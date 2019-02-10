@@ -68,7 +68,8 @@ Y = read_string('q4Y.dat')
 print ("Number of examples : %s" % X_orig.shape[0])
 
 # Normalize X values
-X = normalise(X_orig)
+# X = normalise(X_orig)
+X = X_orig
 
 # We consider Alaska as 0 and Canada as 1
 # Calculate all parameters
@@ -126,8 +127,8 @@ plt.suptitle('Gaussian Discriminant Analysis')
 # Plot separators : zoomed in
 i = 3
 plt.subplot(1, 2, 1)
-x1 = np.arange(-i, i, 0.05)
-x2 = np.arange(-i, i, 0.05)
+x1 = np.arange(50, 180, 1)
+x2 = np.arange(300, 550, 1)
 x1, x2 = np.meshgrid(x1, x2)
 # Linear Separator
 z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)
@@ -142,8 +143,8 @@ plt.title('Zoomed in')
 
 i = 10
 plt.subplot(1, 2, 2)
-x1 = np.arange(-i, i, 0.05)
-x2 = np.arange(-i, i, 0.05)
+x1 = np.arange(-10, 350, 2)
+x2 = np.arange(50, 900, 2)
 x1, x2 = np.meshgrid(x1, x2)
 # Linear Separator
 z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)
