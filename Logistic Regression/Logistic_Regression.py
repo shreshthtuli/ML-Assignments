@@ -207,6 +207,9 @@ x = np.arange(-2, 2.2, 0.1)
 fig = plt.figure(figsize=(30, 30))
 plt.legend()
 index = 0
+plt.suptitle("Logistic Regression")
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
 
 while index < iteration:
 	Theta = np.array(history[index])
@@ -250,3 +253,4 @@ else:
 	gd = "Newton"
 
 plt.savefig('Logistic-regression-'+gd+'-'+str(LearningRate)+'.png')
+plt.show()

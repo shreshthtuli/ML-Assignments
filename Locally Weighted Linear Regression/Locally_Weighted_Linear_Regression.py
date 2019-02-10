@@ -23,7 +23,7 @@ LearningRate = 0.1
 Epsilon = 1e-30
 history = []
 Saved_J = []
-Tau = 0.8
+Tau = 0.2
 
 # Data variables
 X_orig = []
@@ -220,6 +220,9 @@ plt.ylabel("Y")
 plt.xlabel("X")
 title = "Locally weighted linear regression for Tau = " + str(Tau)
 plt.title(title)
+plt.suptitle("Locally Weighted Linear Regression")
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
 
 for i in range(1, 100, 10):
 	# Plot weighted linear regression analytical solution
@@ -246,4 +249,6 @@ elif option == 1:
 else:
     gd = "Analytical"
 
+
 plt.savefig('Weighted-Linear-regression-'+gd+'-'+str(LearningRate)+'.png')
+plt.show()

@@ -167,6 +167,9 @@ Y_plot = [item[0] for item in Y.tolist()]
 x = np.array([item[1] for item in X.tolist()])
 
 fig = plt.figure(figsize=(30, 30))
+fig.suptitle('Linear Regression')
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
 
 A = []; B = [];
 theta0 = np.linspace(-0.25, 2, 100)
@@ -220,3 +223,4 @@ else:
 	gd = "SGD"
 
 plt.savefig('Linear-regression-'+gd+'-'+str(LearningRate)+'.png')
+plt.show()

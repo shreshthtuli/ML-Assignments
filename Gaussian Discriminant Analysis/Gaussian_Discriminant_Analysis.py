@@ -8,6 +8,7 @@ Machine Learning Model : Gaussian Discriminant Analysis
 """
 
 import numpy as np
+from numpy.linalg import inv
 import matplotlib.pyplot as plt
 import matplotlib.colors as clrs
 import math
@@ -39,14 +40,25 @@ def read_string(filename):
 def normalise(X):
 	return (X - np.mean(X, axis=0))/np.std(X, axis=0)
 
-def phi(X, Y):
-    sum1 = 0
-    sum0 = 0
-    for i in Y:
-        if i == 'Canada': sum1 += 1
-        else: sum0 += 1
-    return (sum1 / (sum1 + sum0))
+def boundary_expression(x, u0, u1, sigma0, sigma1, phi):
+    u0 = u0.reshape(2, 1)
+    u1 = u1.reshape(2, 1)
+    sigma0 = np.matrix(sigma0)
+    sigma1 = np.matrix(sigma1)
+    expression = np.float64(((x - u1).T * sigma1.I * (x - u1)) / 2) - \
+        np.float64(((x - u0).T * sigma0.I * (x - u0)) / 2) - \
+        np.log(phi / (1 - phi)) + (np.log(np.linalg.det(sigma1) / np.linalg.det(sigma0))) / 2
+    
+    return expression
 
+def give_separator(x1, x2, u0, u1, sigma0, sigma1, phi):
+    z = np.zeros(x1.shape)
+
+    for i in range(0, len(z)):
+        for j in range(0, len(z[0])):
+            x = np.array([x1[i][j], x2[i][j]]).reshape(2, 1)
+            z[i][j] = boundary_expression(x, u0, u1, sigma0, sigma1, phi)
+    return z
 
 # Read Data
 X_orig = read_float('q4X.dat')
@@ -97,14 +109,52 @@ print 'Sigma = \n', sigma
 print 'Sigma0 = \n', sigma0
 print 'Sigma1 = \n', sigma1
 
-print X
+# Plot data points
 
 for place in ('Alaska', 'Canada'):
     indices = np.where(np.c_[X, Y][:, 2] == place)
     Xtemp = X[indices[0]]
     Xp = Xtemp[:, 0]
     Yp = Xtemp[:, 1]
+    plt.subplot(1, 2, 1)
+    plt.plot(Xp, Yp, 'ro', label=place, c='r' if place == 'Alaska' else 'b')
+    plt.subplot(1, 2, 2)
     plt.plot(Xp, Yp, 'ro', label=place, c='r' if place == 'Alaska' else 'b')
 
+plt.suptitle('Gaussian Discriminant Analysis')
 
+# Plot separators : zoomed in
+i = 3
+plt.subplot(1, 2, 1)
+x1 = np.arange(-i, i, 0.05)
+x2 = np.arange(-i, i, 0.05)
+x1, x2 = np.meshgrid(x1, x2)
+# Linear Separator
+z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)
+linear = plt.contour(x1, x2, z1, levels=[0], colors='green')
+# Quadratic Separator
+z2 = give_separator(x1, x2, u0, u1, sigma0, sigma1, phi)
+quadratic = plt.contour(x1, x2, z2, levels=[0], colors='purple')
+plt.ylabel('x2')
+plt.xlabel('x1')
+plt.title('Zoomed in')
+
+i = 10
+plt.subplot(1, 2, 2)
+x1 = np.arange(-i, i, 0.05)
+x2 = np.arange(-i, i, 0.05)
+x1, x2 = np.meshgrid(x1, x2)
+# Linear Separator
+z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)
+linear = plt.contour(x1, x2, z1, levels=[0], colors='green')
+# Quadratic Separator
+z2 = give_separator(x1, x2, u0, u1, sigma0, sigma1, phi)
+quadratic = plt.contour(x1, x2, z2, levels=[0], colors='purple')
+plt.ylabel('x2')
+plt.xlabel('x1')
+plt.legend(loc='upper right')
+plt.title('Zoomed out')
+
+mng = plt.get_current_fig_manager()
+mng.full_screen_toggle()
 plt.show()
