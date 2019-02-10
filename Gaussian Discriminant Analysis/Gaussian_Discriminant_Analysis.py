@@ -119,7 +119,7 @@ for place in ('Alaska', 'Canada'):
     plt.subplot(1, 2, 1)
     plt.plot(Xp, Yp, 'ro', label=place, c='r' if place == 'Alaska' else 'b')
     plt.subplot(1, 2, 2)
-    plt.plot(Xp, Yp, 'ro', label=place, c='r' if place == 'Alaska' else 'b')
+    plt.plot(Xp, Yp, 'r.', label=place, c='r' if place == 'Alaska' else 'b')
 
 plt.suptitle('Gaussian Discriminant Analysis')
 
