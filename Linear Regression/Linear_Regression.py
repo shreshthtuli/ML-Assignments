@@ -70,6 +70,7 @@ def normalise(X):
 def analytical_solution(X, Y):
     return np.linalg.inv(X.T * X) * X.T * Y
 
+k = 0
 # Batch Gradient Descent Algorithm
 def gradient_descent(X, Y):
 	global iteration
@@ -90,7 +91,11 @@ def gradient_descent(X, Y):
 		Theta = newTheta
 		t += (time.time() - start_time)
 		if j - newJ < Epsilon: 	# Value has converged
-			break		
+			k+=1
+			if k > 10:
+				break
+		else:
+			k = 0
 		j = newJ
 		history.append([item for sublist in Theta.tolist() for item in sublist])
 		Saved_J.append(j)
