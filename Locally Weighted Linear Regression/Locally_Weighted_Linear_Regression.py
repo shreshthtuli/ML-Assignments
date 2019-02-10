@@ -23,7 +23,7 @@ LearningRate = 0.1
 Epsilon = 1e-30
 history = []
 Saved_J = []
-Tau = 0.2
+Tau = 1
 
 # Data variables
 X_orig = []
@@ -165,6 +165,10 @@ print ("Number of examples : %s" % X_orig.shape[0])
 print("Enter Learning rate : "),
 LearningRate = input()
 
+# Take bandwidth parameter from user
+print("Enter bandwidth parameter : "),
+Tau = input()
+
 # Take which Gradient Descent Algorithm to use from user
 print("Enter 0 for BGD and 1 for SGD and 2 for analytical: "),
 option = input()
@@ -224,22 +228,20 @@ plt.suptitle("Locally Weighted Linear Regression")
 mng = plt.get_current_fig_manager()
 mng.full_screen_toggle()
 
-for i in range(1, 100, 10):
-	# Plot weighted linear regression analytical solution
-	plt.subplot(1, 2, 2)	
-	Tau = 10/float(i)
-	yspace = []
-	for x in xspace:
-		yspace.append(give_y(x, weighted_analytical_solution(x, X, Y)))
-	a, = plt.plot(xspace, yspace)
-	title = "Locally weighted linear regression for Tau = " + str(Tau)
-	plt.title(title)
-	plt.pause(0.0001)
-	if i == 9:
-		break;
-	a.remove()
-
-plt.show()
+# for i in range(1, 100, 10):
+# 	# Plot weighted linear regression analytical solution
+# 	plt.subplot(1, 2, 2)	
+# 	Tau = 10/float(i)
+# 	yspace = []
+# 	for x in xspace:
+# 		yspace.append(give_y(x, weighted_analytical_solution(x, X, Y)))
+# 	a, = plt.plot(xspace, yspace)
+# 	title = "Locally weighted linear regression for Tau = " + str(Tau)
+# 	plt.title(title)
+# 	plt.pause(0.0001)
+# 	if i == 9:
+# 		break;
+# 	a.remove()
 
 gd = ''
 if option == 0:
@@ -250,5 +252,5 @@ else:
     gd = "Analytical"
 
 
-plt.savefig('Weighted-Linear-regression-'+gd+'-'+str(LearningRate)+'.png')
+plt.savefig('Weighted-Linear-regression-'+gd+'-'+str(LearningRate)+'-'+str(Tau)+'.png')
 plt.show()
