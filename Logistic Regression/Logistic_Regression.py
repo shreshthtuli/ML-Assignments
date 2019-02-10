@@ -211,7 +211,7 @@ plt.suptitle("Logistic Regression")
 mng = plt.get_current_fig_manager()
 mng.full_screen_toggle()
 
-while index < iteration:
+while index < iteration-1:
 	Theta = np.array(history[index])
 	# Plot 
 	plt.subplot(1, 2, 1)
