@@ -23,7 +23,7 @@ LearningRate = 0.1
 Epsilon = 1e-30
 history = []
 Saved_J = []
-Tau = 1
+Tau = 0.1
 
 # Data variables
 X_orig = []
