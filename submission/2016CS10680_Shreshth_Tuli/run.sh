@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ $1 = 1 ]
 then
-    python ./Linear_regression.py $2 $3 $4 $5
+    python ./Linear_Regression.py $2 $3 $4 $5
     exit
 elif [ $1 = 2 ]
 then
