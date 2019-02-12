@@ -16,6 +16,7 @@ import matplotlib.animation as animation
 from mpl_toolkits.mplot3d import Axes3D
 import time
 from random import shuffle, random
+import sys
 
 # Variables used in learing algorithm
 iteration = 0
@@ -116,8 +117,8 @@ def gradient_descent(X, Y):
 		j = newJ
 		history.append([item for sublist in Theta.tolist() for item in sublist])
 		Saved_J.append(j)
-	print("Total time : "),
-	print(t)
+	# print("Total time : "),
+	# print(t)
 	return Theta
 
 # Stochastic Gradient Descent Algorithm
@@ -155,27 +156,28 @@ def stochastic_gradient_descent(X, Y):
 	return Theta
 
 # Read Data
-X_orig = read('weightedX.csv')
-Y = read('weightedY.csv')
+X_orig = read(sys.argv[1])
+Y = read(sys.argv[2])
 
 # Prints size of training set
-print ("Number of examples : %s" % X_orig.shape[0])
+# print ("Number of examples : %s" % X_orig.shape[0])
 
 # Take learning rate from user
-print("Enter Learning rate : "),
-LearningRate = input()
+# print("Enter Learning rate : "),
+# LearningRate = input()
 
 # Take bandwidth parameter from user
-print("Enter bandwidth parameter : "),
-Tau = input()
+# print("Enter bandwidth parameter : "),
+Tau = float(sys.argv[3])
 
 # Take which Gradient Descent Algorithm to use from user
-print("Enter 0 for BGD and 1 for SGD and 2 for analytical: "),
-option = input()
+# print("Enter 0 for BGD and 1 for SGD and 2 for analytical: "),
+# option = input()
 
 option = 2
 
 # Normalize X values
+# X = np.c_[np.ones((X_orig.shape[0], 1)), normalise(X_orig)]
 X = np.c_[np.ones((X_orig.shape[0], 1)), X_orig]
 
 # Perform Gradient Descent
@@ -186,14 +188,14 @@ elif option == 0:
 	FinalTheta = gradient_descent(X, Y)
 
 # Print results
-print 'Iterations used = ', iteration
+# print 'Iterations used = ', iteration
 
 # Create plots
 Y_plot = [item[0] for item in Y.tolist()]
 X_plot = [item[1] for item in X.tolist()]
 x = np.array([item[1] for item in X.tolist()])
 
-fig = plt.figure(figsize=(30, 30))
+fig = plt.figure(figsize=(10, 7))
 
 xspace = np.linspace(np.min(X_plot), np.max(X_plot), 1000).tolist()
 
@@ -225,8 +227,8 @@ plt.xlabel("X")
 title = "Locally weighted linear regression for Tau = " + str(Tau)
 plt.title(title)
 plt.suptitle("Locally Weighted Linear Regression")
-mng = plt.get_current_fig_manager()
-mng.full_screen_toggle()
+# mng = plt.get_current_fig_manager()
+# mng.full_screen_toggle()
 
 # for i in range(1, 100, 10):
 # 	# Plot weighted linear regression analytical solution
