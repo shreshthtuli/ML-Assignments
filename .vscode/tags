@@ -1,0 +1,307 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+A	Gaussian Discriminant Analysis/test.py	/^A = [1,1]$/;"	kind:variable	line:87
+All_Thetas	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^All_Thetas = []$/;"	kind:variable	line:201
+Axes3D	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:18
+Axes3D	Linear Regression/Linear_Regression.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:16
+Axes3D	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:16
+Axes3D	Logistic Regression/Logistic_Regression.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:16
+Axes3D	Naive Bayes/Naive_Bayes.py	/^from mpl_toolkits.mplot3d import Axes3D$/;"	kind:namespace	line:16
+CS	Linear Regression/Linear_Regression.py	/^	CS = plt.contour(theta0, theta1, Z)$/;"	kind:variable	line:212
+Epsilon	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^Epsilon = 1e-30$/;"	kind:variable	line:25
+Epsilon	Linear Regression/Linear_Regression.py	/^Epsilon = 1e-20$/;"	kind:variable	line:23
+Epsilon	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Epsilon = 1e-30$/;"	kind:variable	line:23
+Epsilon	Logistic Regression/Logistic_Regression.py	/^Epsilon = 1e-10$/;"	kind:variable	line:23
+FinalTheta	Linear Regression/Linear_Regression.py	/^	FinalTheta = gradient_descent(X, Y)$/;"	kind:variable	line:164
+FinalTheta	Linear Regression/Linear_Regression.py	/^	FinalTheta = stochastic_gradient_descent(X, Y)$/;"	kind:variable	line:162
+FinalTheta	Linear Regression/Linear_Regression.py	/^FinalTheta = []$/;"	kind:variable	line:160
+FinalTheta	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^	FinalTheta = gradient_descent(X, Y)$/;"	kind:variable	line:186
+FinalTheta	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^	FinalTheta = stochastic_gradient_descent(X, Y)$/;"	kind:variable	line:184
+FinalTheta	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^FinalTheta = []$/;"	kind:variable	line:182
+FinalTheta	Logistic Regression/Logistic_Regression.py	/^	FinalTheta = gradient_descent(X, Y)$/;"	kind:variable	line:187
+FinalTheta	Logistic Regression/Logistic_Regression.py	/^	FinalTheta = stochastic_gradient_descent(X, Y)$/;"	kind:variable	line:185
+FinalTheta	Logistic Regression/Logistic_Regression.py	/^    FinalTheta = newtons_method(X, Y)$/;"	kind:variable	line:189
+FinalTheta	Logistic Regression/Logistic_Regression.py	/^FinalTheta = []$/;"	kind:variable	line:183
+FormatStrFormatter	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:16
+FormatStrFormatter	Linear Regression/Linear_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+FormatStrFormatter	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+FormatStrFormatter	Logistic Regression/Logistic_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+FormatStrFormatter	Naive Bayes/Naive_Bayes.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+Gaussian_Discriminant_Analysis.py	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	1;"	kind:file	line:1
+Hessian	Logistic Regression/Logistic_Regression.py	/^def Hessian(X, Y, Theta):$/;"	kind:function	line:66
+J	Linear Regression/Linear_Regression.py	/^def J(X, Y, Theta):$/;"	kind:function	line:49
+J	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def J(X, Y, W, Theta):$/;"	kind:function	line:51
+J_plot	Linear Regression/Linear_Regression.py	/^def J_plot(Theta_0, Theta_1):$/;"	kind:function	line:61
+J_plot	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def J_plot(Theta_0, Theta_1):$/;"	kind:function	line:63
+L	Logistic Regression/Logistic_Regression.py	/^def L(X, Y, Theta):$/;"	kind:function	line:45
+LearningRate	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^LearningRate = 0.1$/;"	kind:variable	line:24
+LearningRate	Linear Regression/Linear_Regression.py	/^LearningRate = 0.1$/;"	kind:variable	line:22
+LearningRate	Linear Regression/Linear_Regression.py	/^LearningRate = input()$/;"	kind:variable	line:150
+LearningRate	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^LearningRate = 0.1$/;"	kind:variable	line:22
+LearningRate	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^LearningRate = input()$/;"	kind:variable	line:166
+LearningRate	Logistic Regression/Logistic_Regression.py	/^LearningRate = 0.5$/;"	kind:variable	line:22
+LearningRate	Logistic Regression/Logistic_Regression.py	/^LearningRate = input()$/;"	kind:variable	line:173
+LinBoundary	Gaussian Discriminant Analysis/test.py	/^def LinBoundary(u0,u1,S,X):$/;"	kind:function	line:23
+LinearLocator	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:16
+LinearLocator	Linear Regression/Linear_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+LinearLocator	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+LinearLocator	Logistic Regression/Logistic_Regression.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+LinearLocator	Naive Bayes/Naive_Bayes.py	/^from matplotlib.ticker import LinearLocator, FormatStrFormatter$/;"	kind:namespace	line:14
+Linear_Regression.py	Linear Regression/Linear_Regression.py	1;"	kind:file	line:1
+Locally_Weighted_Linear_Regression.py	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	1;"	kind:file	line:1
+Logistic_Regression.py	Logistic Regression/Logistic_Regression.py	1;"	kind:file	line:1
+Naive_Bayes.py	Naive Bayes/Naive_Bayes.py	1;"	kind:file	line:1
+PorterStemmer	Naive Bayes/utils.py	/^from nltk.stem.porter import PorterStemmer$/;"	kind:namespace	line:3
+QuadBoundary	Gaussian Discriminant Analysis/test.py	/^def QuadBoundary(u0,u1,S0,S1,X):$/;"	kind:function	line:38
+Saved_J	Linear Regression/Linear_Regression.py	/^Saved_J = []$/;"	kind:variable	line:25
+Saved_J	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Saved_J = []$/;"	kind:variable	line:25
+Saved_L	Logistic Regression/Logistic_Regression.py	/^Saved_L = []$/;"	kind:variable	line:25
+Tau	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Tau = 0.1$/;"	kind:variable	line:26
+Tau	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Tau = input()$/;"	kind:variable	line:170
+Theta	Logistic Regression/Logistic_Regression.py	/^	Theta = np.array(history[index])$/;"	kind:variable	line:215
+W	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^W = []$/;"	kind:variable	line:32
+X	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^X = X_orig$/;"	kind:variable	line:72
+X	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^X = [] # Normalized X with X0 as 1$/;"	kind:variable	line:30
+X	Gaussian Discriminant Analysis/test.py	/^X = (X-X_mean)\/X_std$/;"	kind:variable	line:63
+X	Gaussian Discriminant Analysis/test.py	/^X = Xread()$/;"	kind:variable	line:57
+X	Linear Regression/Linear_Regression.py	/^X = [] # Normalized X with X0 as 1$/;"	kind:variable	line:30
+X	Linear Regression/Linear_Regression.py	/^X = np.c_[np.ones((X_orig.shape[0], 1)), normalise(X_orig)]$/;"	kind:variable	line:157
+X	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^X = [] # Normalized X with X0 as 1$/;"	kind:variable	line:31
+X	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^X = np.c_[np.ones((X_orig.shape[0], 1)), X_orig]$/;"	kind:variable	line:179
+X	Logistic Regression/Logistic_Regression.py	/^X = [] # Normalized X with X0 as 1$/;"	kind:variable	line:30
+X	Logistic Regression/Logistic_Regression.py	/^X = np.c_[np.ones((X_orig.shape[0], 1)), normalise(X_orig)]$/;"	kind:variable	line:180
+X_mean	Gaussian Discriminant Analysis/test.py	/^X_mean = np.mean(X, axis=0)$/;"	kind:variable	line:61
+X_one	Gaussian Discriminant Analysis/test.py	/^X_one = []$/;"	kind:variable	line:66
+X_one	Logistic Regression/Logistic_Regression.py	/^X_one = []$/;"	kind:variable	line:195
+X_orig	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^X_orig = []$/;"	kind:variable	line:28
+X_orig	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^X_orig = read_float('q4X.dat')$/;"	kind:variable	line:64
+X_orig	Linear Regression/Linear_Regression.py	/^X_orig = []$/;"	kind:variable	line:28
+X_orig	Linear Regression/Linear_Regression.py	/^X_orig = read('linearX.csv')$/;"	kind:variable	line:142
+X_orig	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^X_orig = []$/;"	kind:variable	line:29
+X_orig	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^X_orig = read('weightedX.csv')$/;"	kind:variable	line:158
+X_orig	Logistic Regression/Logistic_Regression.py	/^X_orig = []$/;"	kind:variable	line:28
+X_orig	Logistic Regression/Logistic_Regression.py	/^X_orig = read('logisticX.csv')$/;"	kind:variable	line:165
+X_plot	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^X_plot = [item[1] for item in X.tolist()]$/;"	kind:variable	line:193
+X_plot0	Gaussian Discriminant Analysis/test.py	/^X_plot0 = [item[0] for item in X_zero]$/;"	kind:variable	line:105
+X_plot0	Logistic Regression/Logistic_Regression.py	/^	X_plot0 = [item[0] for item in X_zero]$/;"	kind:variable	line:222
+X_plot1	Gaussian Discriminant Analysis/test.py	/^X_plot1 = [item[0] for item in X_one]$/;"	kind:variable	line:101
+X_plot1	Logistic Regression/Logistic_Regression.py	/^	X_plot1 = [item[0] for item in X_one]$/;"	kind:variable	line:218
+X_std	Gaussian Discriminant Analysis/test.py	/^X_std = np.std(X, axis=0)$/;"	kind:variable	line:62
+X_zero	Gaussian Discriminant Analysis/test.py	/^X_zero = []$/;"	kind:variable	line:67
+X_zero	Logistic Regression/Logistic_Regression.py	/^X_zero = []$/;"	kind:variable	line:196
+Xp	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^    Xp = Xtemp[:, 0]$/;"	kind:variable	line:118
+Xread	Gaussian Discriminant Analysis/test.py	/^def Xread():$/;"	kind:function	line:15
+Xtemp	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^    Xtemp = X[indices[0]]$/;"	kind:variable	line:117
+Y	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^Y = []$/;"	kind:variable	line:29
+Y	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^Y = read_string('q4Y.dat')$/;"	kind:variable	line:65
+Y	Gaussian Discriminant Analysis/test.py	/^Y = Yread()$/;"	kind:variable	line:58
+Y	Linear Regression/Linear_Regression.py	/^Y = []$/;"	kind:variable	line:29
+Y	Linear Regression/Linear_Regression.py	/^Y = read('linearY.csv')$/;"	kind:variable	line:143
+Y	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Y = []$/;"	kind:variable	line:30
+Y	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Y = read('weightedY.csv')$/;"	kind:variable	line:159
+Y	Logistic Regression/Logistic_Regression.py	/^Y = []$/;"	kind:variable	line:29
+Y	Logistic Regression/Logistic_Regression.py	/^Y = read('logisticY.csv')$/;"	kind:variable	line:166
+Y_plot	Linear Regression/Linear_Regression.py	/^Y_plot = [item[0] for item in Y.tolist()]$/;"	kind:variable	line:172
+Y_plot	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^Y_plot = [item[0] for item in Y.tolist()]$/;"	kind:variable	line:192
+Y_plot0	Gaussian Discriminant Analysis/test.py	/^Y_plot0 = [item[1] for item in X_zero]$/;"	kind:variable	line:106
+Y_plot0	Logistic Regression/Logistic_Regression.py	/^	Y_plot0 = [item[1] for item in X_zero]$/;"	kind:variable	line:223
+Y_plot1	Gaussian Discriminant Analysis/test.py	/^Y_plot1 = [item[1] for item in X_one]$/;"	kind:variable	line:102
+Y_plot1	Logistic Regression/Logistic_Regression.py	/^	Y_plot1 = [item[1] for item in X_one]$/;"	kind:variable	line:219
+Yp	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^    Yp = Xtemp[:, 1]$/;"	kind:variable	line:119
+Yread	Gaussian Discriminant Analysis/test.py	/^def Yread():$/;"	kind:function	line:19
+Z	Linear Regression/Linear_Regression.py	/^Z = np.vectorize(J_plot)(theta0, theta1)$/;"	kind:variable	line:184
+__author__	Naive Bayes/utils.py	/^__author__= 'KD'$/;"	kind:variable	line:7
+_stem	Naive Bayes/utils.py	/^def _stem(doc, p_stemmer, en_stop, return_tokens):$/;"	kind:function	line:33
+analytical_solution	Linear Regression/Linear_Regression.py	/^def analytical_solution(X, Y):$/;"	kind:function	line:70
+analytical_solution	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def analytical_solution(X, Y):$/;"	kind:function	line:84
+animation	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:17
+animation	Linear Regression/Linear_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+animation	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+animation	Logistic Regression/Logistic_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+animation	Naive Bayes/Naive_Bayes.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+ax3	Linear Regression/Linear_Regression.py	/^ax3 = fig.add_subplot(2, 2, 3, projection='3d')$/;"	kind:variable	line:185
+boundary_expression	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^def boundary_expression(x, u0, u1, sigma0, sigma1, phi):$/;"	kind:function	line:43
+boundary_line	Logistic Regression/Logistic_Regression.py	/^def boundary_line(x, Theta):$/;"	kind:function	line:62
+clrs	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.colors as clrs$/;"	kind:namespace	line:13
+cm	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from matplotlib import cm$/;"	kind:namespace	line:15
+cm	Linear Regression/Linear_Regression.py	/^from matplotlib import cm$/;"	kind:namespace	line:13
+cm	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from matplotlib import cm$/;"	kind:namespace	line:13
+cm	Logistic Regression/Logistic_Regression.py	/^from matplotlib import cm$/;"	kind:namespace	line:13
+cm	Naive Bayes/Naive_Bayes.py	/^from matplotlib import cm$/;"	kind:namespace	line:13
+fig	Linear Regression/Linear_Regression.py	/^fig = plt.figure(figsize=(30, 30))$/;"	kind:variable	line:175
+fig	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^fig = plt.figure(figsize=(30, 30))$/;"	kind:variable	line:196
+fig	Logistic Regression/Logistic_Regression.py	/^fig = plt.figure(figsize=(30, 30))$/;"	kind:variable	line:207
+gd	Linear Regression/Linear_Regression.py	/^	gd = "BGD"$/;"	kind:variable	line:227
+gd	Linear Regression/Linear_Regression.py	/^	gd = "SGD"$/;"	kind:variable	line:229
+gd	Linear Regression/Linear_Regression.py	/^gd = ''$/;"	kind:variable	line:225
+gd	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^	gd = "BGD"$/;"	kind:variable	line:248
+gd	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^	gd = "SGD"$/;"	kind:variable	line:250
+gd	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^    gd = "Analytical"$/;"	kind:variable	line:252
+gd	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^gd = ''$/;"	kind:variable	line:246
+gd	Logistic Regression/Logistic_Regression.py	/^	gd = "BGD"$/;"	kind:variable	line:249
+gd	Logistic Regression/Logistic_Regression.py	/^	gd = "Newton"$/;"	kind:variable	line:253
+gd	Logistic Regression/Logistic_Regression.py	/^	gd = "SGD"$/;"	kind:variable	line:251
+gd	Logistic Regression/Logistic_Regression.py	/^gd = ''$/;"	kind:variable	line:247
+getStemmedDocuments	Naive Bayes/utils.py	/^def getStemmedDocuments(docs, return_tokens=True):$/;"	kind:function	line:42
+get_W	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def get_W(x, X, Tau):$/;"	kind:function	line:71
+give_separator	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^def give_separator(x1, x2, u0, u1, sigma0, sigma1, phi):$/;"	kind:function	line:54
+give_y	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def give_y(x, Theta):$/;"	kind:function	line:92
+gradJ	Linear Regression/Linear_Regression.py	/^def gradJ(X, Y, Theta):$/;"	kind:function	line:53
+gradJ	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def gradJ(X, Y, W, Theta):$/;"	kind:function	line:55
+gradJ	Logistic Regression/Logistic_Regression.py	/^def gradJ(X, Y, Theta):$/;"	kind:function	line:50
+gradJ_sgd	Linear Regression/Linear_Regression.py	/^def gradJ_sgd(X, Y, Theta, i):$/;"	kind:function	line:57
+gradJ_sgd	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def gradJ_sgd(X, Y, Theta, i):$/;"	kind:function	line:59
+gradJ_sgd	Logistic Regression/Logistic_Regression.py	/^def gradJ_sgd(X, Y, Theta, i):$/;"	kind:function	line:55
+gradient_descent	Linear Regression/Linear_Regression.py	/^def gradient_descent(X, Y):$/;"	kind:function	line:75
+gradient_descent	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def gradient_descent(X, Y):$/;"	kind:function	line:96
+gradient_descent	Logistic Regression/Logistic_Regression.py	/^def gradient_descent(X, Y):$/;"	kind:function	line:72
+history	Linear Regression/Linear_Regression.py	/^history = []$/;"	kind:variable	line:24
+history	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^history = []$/;"	kind:variable	line:24
+history	Logistic Regression/Logistic_Regression.py	/^history = []$/;"	kind:variable	line:24
+hypothesis	Linear Regression/Linear_Regression.py	/^def hypothesis(X, Theta):$/;"	kind:function	line:37
+hypothesis	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def hypothesis(X, Theta):$/;"	kind:function	line:39
+hypothesis	Logistic Regression/Logistic_Regression.py	/^def hypothesis(X, Theta, i):$/;"	kind:function	line:37
+hypothesis_particular	Linear Regression/Linear_Regression.py	/^def hypothesis_particular(X, Theta, i):$/;"	kind:function	line:41
+hypothesis_particular	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def hypothesis_particular(X, Theta, i):$/;"	kind:function	line:43
+hypothesis_x	Linear Regression/Linear_Regression.py	/^def hypothesis_x(Theta, x):$/;"	kind:function	line:45
+hypothesis_x	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def hypothesis_x(Theta, x):$/;"	kind:function	line:47
+hypothesis_x	Logistic Regression/Logistic_Regression.py	/^def hypothesis_x(Theta, x1, x2):$/;"	kind:function	line:41
+i	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^i = 10$/;"	kind:variable	line:144
+i	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^i = 3$/;"	kind:variable	line:128
+index	Linear Regression/Linear_Regression.py	/^	index = index + 1$/;"	kind:variable	line:205
+index	Logistic Regression/Logistic_Regression.py	/^	index = int(1.1*index) + 1$/;"	kind:variable	line:245
+index	Logistic Regression/Logistic_Regression.py	/^index = 0$/;"	kind:variable	line:209
+indices	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^    indices = np.where(np.c_[X, Y][:, 2] == place)$/;"	kind:variable	line:116
+inv	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from numpy.linalg import inv$/;"	kind:namespace	line:11
+inv	Gaussian Discriminant Analysis/test.py	/^from numpy.linalg import inv$/;"	kind:namespace	line:12
+iteration	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^iteration = 0$/;"	kind:variable	line:23
+iteration	Linear Regression/Linear_Regression.py	/^iteration = 0$/;"	kind:variable	line:21
+iteration	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^iteration = 0$/;"	kind:variable	line:21
+iteration	Logistic Regression/Logistic_Regression.py	/^iteration = 0$/;"	kind:variable	line:21
+itertools	Gaussian Discriminant Analysis/test.py	/^import itertools$/;"	kind:namespace	line:11
+json	Naive Bayes/utils.py	/^import json$/;"	kind:namespace	line:1
+json_reader	Naive Bayes/utils.py	/^def json_reader(fname):$/;"	kind:function	line:21
+json_writer	Naive Bayes/utils.py	/^def json_writer(data, fname):$/;"	kind:function	line:9
+k	Linear Regression/Linear_Regression.py	/^k = 0$/;"	kind:variable	line:73
+line	Linear Regression/Linear_Regression.py	/^	line = history[index]$/;"	kind:variable	line:191
+linear	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^linear = plt.contour(x1, x2, z1, levels=[0], colors='green')$/;"	kind:variable	line:135
+linear	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^linear = plt.contour(x1, x2, z1, levels=[0], colors='green')$/;"	kind:variable	line:151
+math	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import math$/;"	kind:namespace	line:14
+math	Gaussian Discriminant Analysis/test.py	/^import math$/;"	kind:namespace	line:10
+math	Linear Regression/Linear_Regression.py	/^import math$/;"	kind:namespace	line:12
+math	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import math$/;"	kind:namespace	line:12
+math	Logistic Regression/Logistic_Regression.py	/^import math$/;"	kind:namespace	line:12
+math	Naive Bayes/Naive_Bayes.py	/^import math$/;"	kind:namespace	line:12
+matplotlib	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:17
+matplotlib	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.colors as clrs$/;"	kind:namespace	line:13
+matplotlib	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:12
+matplotlib	Gaussian Discriminant Analysis/test.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:9
+matplotlib	Linear Regression/Linear_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+matplotlib	Linear Regression/Linear_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+matplotlib	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+matplotlib	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+matplotlib	Logistic Regression/Logistic_Regression.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+matplotlib	Logistic Regression/Logistic_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+matplotlib	Naive Bayes/Naive_Bayes.py	/^import matplotlib.animation as animation$/;"	kind:namespace	line:15
+matplotlib	Naive Bayes/Naive_Bayes.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+mean_0	Gaussian Discriminant Analysis/test.py	/^mean_0 = np.sum(np.matrix(X_zero), axis=0) \/ len(X_zero)$/;"	kind:variable	line:76
+mean_1	Gaussian Discriminant Analysis/test.py	/^mean_1 = np.sum(np.matrix(X_one), axis=0) \/ len(X_one)$/;"	kind:variable	line:77
+mng	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^mng = plt.get_current_fig_manager()$/;"	kind:variable	line:160
+mng	Linear Regression/Linear_Regression.py	/^mng = plt.get_current_fig_manager()$/;"	kind:variable	line:177
+mng	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^mng = plt.get_current_fig_manager()$/;"	kind:variable	line:228
+mng	Logistic Regression/Logistic_Regression.py	/^mng = plt.get_current_fig_manager()$/;"	kind:variable	line:211
+new_text	Naive Bayes/test.py	/^                All pythoners have pythoned poorly at least once."$/;"	kind:variable	line:4
+newtons_method	Logistic Regression/Logistic_Regression.py	/^def newtons_method(X, Y):$/;"	kind:function	line:136
+normalise	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^def normalise(X):$/;"	kind:function	line:40
+normalise	Linear Regression/Linear_Regression.py	/^def normalise(X):$/;"	kind:function	line:66
+normalise	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def normalise(X):$/;"	kind:function	line:68
+normalise	Logistic Regression/Logistic_Regression.py	/^def normalise(X):$/;"	kind:function	line:59
+np	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import numpy as np$/;"	kind:namespace	line:10
+np	Gaussian Discriminant Analysis/test.py	/^import numpy as np$/;"	kind:namespace	line:8
+np	Linear Regression/Linear_Regression.py	/^import numpy as np$/;"	kind:namespace	line:10
+np	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import numpy as np$/;"	kind:namespace	line:10
+np	Logistic Regression/Logistic_Regression.py	/^import numpy as np$/;"	kind:namespace	line:10
+np	Naive Bayes/Naive_Bayes.py	/^import numpy as np$/;"	kind:namespace	line:10
+option	Linear Regression/Linear_Regression.py	/^option = input()$/;"	kind:variable	line:154
+option	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^option = 2$/;"	kind:variable	line:176
+option	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^option = input()$/;"	kind:variable	line:174
+option	Logistic Regression/Logistic_Regression.py	/^option = input()$/;"	kind:variable	line:177
+phi	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^phi = sum1 \/ (sum1 + sum0)$/;"	kind:variable	line:89
+phi	Gaussian Discriminant Analysis/test.py	/^phi = float(len(X_one))\/(len(X_one) + len(X_zero))$/;"	kind:variable	line:75
+plt	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:12
+plt	Gaussian Discriminant Analysis/test.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:9
+plt	Linear Regression/Linear_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+plt	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+plt	Logistic Regression/Logistic_Regression.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+plt	Naive Bayes/Naive_Bayes.py	/^import matplotlib.pyplot as plt$/;"	kind:namespace	line:11
+point	Linear Regression/Linear_Regression.py	/^	point = ax3.plot([line[0]],[line[1]],[Saved_J[index-1]], 'r.')$/;"	kind:variable	line:209
+point	Linear Regression/Linear_Regression.py	/^	point = plt.plot(A,B)$/;"	kind:variable	line:215
+point	Linear Regression/Linear_Regression.py	/^	point = plt.plot([line[0]],[line[1]], 'ro')$/;"	kind:variable	line:214
+quadratic	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^quadratic = plt.contour(x1, x2, z2, levels=[0], colors='purple')$/;"	kind:variable	line:138
+quadratic	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^quadratic = plt.contour(x1, x2, z2, levels=[0], colors='purple')$/;"	kind:variable	line:154
+random	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from random import shuffle, random$/;"	kind:namespace	line:20
+random	Linear Regression/Linear_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+random	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+random	Logistic Regression/Logistic_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+random	Naive Bayes/Naive_Bayes.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+read	Linear Regression/Linear_Regression.py	/^def read(filename):$/;"	kind:function	line:33
+read	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def read(filename):$/;"	kind:function	line:35
+read	Logistic Regression/Logistic_Regression.py	/^def read(filename):$/;"	kind:function	line:33
+read_float	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^def read_float(filename):$/;"	kind:function	line:33
+read_string	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^def read_string(filename):$/;"	kind:function	line:36
+shuffle	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^from random import shuffle, random$/;"	kind:namespace	line:20
+shuffle	Linear Regression/Linear_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+shuffle	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+shuffle	Logistic Regression/Logistic_Regression.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+shuffle	Naive Bayes/Naive_Bayes.py	/^from random import shuffle, random$/;"	kind:namespace	line:18
+sigma	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^sigma = (sigma1 + sigma0) \/ X.shape[0]$/;"	kind:variable	line:102
+sigma	Gaussian Discriminant Analysis/test.py	/^sigma = ( sigma_1 + sigma_0 ) \/ X.shape[0]$/;"	kind:variable	line:93
+sigma	Gaussian Discriminant Analysis/test.py	/^sigma = np.zeros((2, 2))$/;"	kind:variable	line:83
+sigma0	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^sigma0 = np.zeros((2, 2))$/;"	kind:variable	line:93
+sigma1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^sigma1 = np.zeros((2, 2))$/;"	kind:variable	line:94
+sigma_0	Gaussian Discriminant Analysis/test.py	/^sigma_0 = np.zeros((2, 2))$/;"	kind:variable	line:84
+sigma_1	Gaussian Discriminant Analysis/test.py	/^sigma_1 = np.zeros((2, 2))$/;"	kind:variable	line:85
+stochastic_gradient_descent	Linear Regression/Linear_Regression.py	/^def stochastic_gradient_descent(X, Y):$/;"	kind:function	line:108
+stochastic_gradient_descent	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def stochastic_gradient_descent(X, Y):$/;"	kind:function	line:124
+stochastic_gradient_descent	Logistic Regression/Logistic_Regression.py	/^def stochastic_gradient_descent(X, Y):$/;"	kind:function	line:101
+stopwords	Naive Bayes/utils.py	/^from nltk.corpus import stopwords$/;"	kind:namespace	line:4
+sum0	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^sum0 = 0.0$/;"	kind:variable	line:79
+sum1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^sum1 = 0.0$/;"	kind:variable	line:78
+sys	Naive Bayes/utils.py	/^import sys$/;"	kind:namespace	line:2
+test.py	Gaussian Discriminant Analysis/test.py	1;"	kind:file	line:1
+test.py	Naive Bayes/test.py	1;"	kind:file	line:1
+theta0	Linear Regression/Linear_Regression.py	/^theta0 = np.linspace(-0.25, 2, 100)$/;"	kind:variable	line:181
+theta1	Linear Regression/Linear_Regression.py	/^theta1 = np.linspace(-1, 1, 100)$/;"	kind:variable	line:182
+time	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^import time$/;"	kind:namespace	line:19
+time	Linear Regression/Linear_Regression.py	/^import time$/;"	kind:namespace	line:17
+time	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^import time$/;"	kind:namespace	line:17
+time	Logistic Regression/Logistic_Regression.py	/^import time$/;"	kind:namespace	line:17
+time	Naive Bayes/Naive_Bayes.py	/^import time$/;"	kind:namespace	line:17
+train_input	Naive Bayes/Naive_Bayes.py	/^train_input = json_reader("train.json")/;"	kind:variable	line:21
+u0	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^u0 = np.zeros((1, 2))$/;"	kind:variable	line:76
+u0	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^u0 = u0 \/ sum0$/;"	kind:variable	line:90
+u1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^u1 = np.zeros((1, 2))$/;"	kind:variable	line:77
+u1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^u1 = u1 \/ sum1$/;"	kind:variable	line:91
+utils.py	Naive Bayes/utils.py	1;"	kind:file	line:1
+weighted_analytical_solution	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^def weighted_analytical_solution(x, X, Y):$/;"	kind:function	line:88
+word_tokenize	Naive Bayes/utils.py	/^from nltk.tokenize import word_tokenize$/;"	kind:namespace	line:5
+x	Gaussian Discriminant Analysis/test.py	/^x = np.arange(-2, 2, 0.1)$/;"	kind:variable	line:110
+x	Linear Regression/Linear_Regression.py	/^x = np.array([item[1] for item in X.tolist()])$/;"	kind:variable	line:173
+x	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^x = np.array([item[1] for item in X.tolist()])$/;"	kind:variable	line:194
+x	Logistic Regression/Logistic_Regression.py	/^x = np.arange(-2, 2.2, 0.1)$/;"	kind:variable	line:205
+x	Naive Bayes/test.py	/^x = json_reader("train.json")$/;"	kind:variable	line:7
+x1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^x1 = np.arange(-10, 350, 2)$/;"	kind:variable	line:146
+x1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^x1 = np.arange(50, 180, 1)$/;"	kind:variable	line:130
+x2	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^x2 = np.arange(300, 550, 1)$/;"	kind:variable	line:131
+x2	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^x2 = np.arange(50, 900, 2)$/;"	kind:variable	line:147
+xspace	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^xspace = np.linspace(np.min(X_plot), np.max(X_plot), 1000).tolist()$/;"	kind:variable	line:198
+y	Naive Bayes/test.py	/^y = next(x)$/;"	kind:variable	line:9
+yspace	Locally Weighted Linear Regression/Locally_Weighted_Linear_Regression.py	/^yspace = []$/;"	kind:variable	line:204
+z1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)$/;"	kind:variable	line:134
+z1	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^z1 = give_separator(x1, x2, u0, u1, sigma, sigma, phi)$/;"	kind:variable	line:150
+z2	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^z2 = give_separator(x1, x2, u0, u1, sigma0, sigma1, phi)$/;"	kind:variable	line:137
+z2	Gaussian Discriminant Analysis/Gaussian_Discriminant_Analysis.py	/^z2 = give_separator(x1, x2, u0, u1, sigma0, sigma1, phi)$/;"	kind:variable	line:153
