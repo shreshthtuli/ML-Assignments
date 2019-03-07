@@ -6,26 +6,21 @@ Copyright (c) 2019 Shreshth Tuli
 Machine Learning Model : Naive Bayes
 
 """
-
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib import cm
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import matplotlib.animation as animation
-from mpl_toolkits.mplot3d import Axes3D
-import time
-from random import shuffle, random
 from utils import *
 from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import classification_report
-import nltk
 
 # Hyper parameters
-tokenize_type = 2
+tokenize_type = 3
 
 # Global constants
 categories = 5
@@ -36,18 +31,35 @@ Denom = [0.0, 0.0, 0.0, 0.0, 0.0]
 Phi = [0, 0, 0, 0, 0] # For y : 1 to 5
 Theta = np.empty((dicts, categories)) # 
 
+def bigrams(lst):
+    result = []
+    for i in range(len(lst)-1):
+        result.append(lst[i] + lst[i+1])
+    return result
+
 def tokenize(str):
-    if tokenize_type == 1:
+    if tokenize_type == 1: # Do nothing
         return str.strip().split()
-    elif tokenize_type == 2:
+    elif tokenize_type == 2: # Stemming and Stopword removal
         return getStemmedDocuments(str)
-    elif tokenize_type == 3:
+    elif tokenize_type == 3: # 2 and Bigrams
         a = getStemmedDocuments(str)
-        a.extend(list(nltk.bigrams(str.split())))
+        a.extend(bigrams(a))
         return a
-    elif tokenize_type == 4:
+    elif tokenize_type == 4: # 2 and adding first 10 words again
         a = getStemmedDocuments(str)
         a.extend(a[:10])
+        return a
+    elif tokenize_type == 5: # 2 and pos tags
+        a = getStemmedDocuments(str)
+        a.extend(pos_tag(a))
+        return a
+    elif tokenize_type == 6: # 2 and adding hash of good/bad
+        a = getStemmedDocuments(str)
+        if u'amaz' in a or 'good' in a or u"excel" in a or "best" in a or u'love' in a:
+            a.append("qwertyuiop")
+        if "bad" in a or "worst" in a or "dissapoint" in a or "poor" in a:
+            a.append("asdfghjkl")
         return a
 
 def generate_vocab():
@@ -85,10 +97,10 @@ def train(vocab, inputs):
             Denom[c-1] += 1
     
     for i in range(categories):
-        Phi[i] = (Phi[i]+1)/(M+5)
+        Phi[i] = np.log2(Phi[i]) #(Phi[i]+1)/(M+5)
     for k in range(dicts):
         for c in range(categories):
-            Theta[k][c] = (Theta[k][c] + 1) / (Denom[c] + dicts)
+            Theta[k][c] = np.log2((Theta[k][c] + 1.0) / (Denom[c] + dicts))
     
     return Phi, Theta, Denom
 
@@ -97,12 +109,12 @@ def theta_k_c(token, category):
     except: return 1.0 / (dicts + Denom[category])
     
 def classify(text):
-    probs = np.array([0, 0, 0, 0, 0])
+    probs = np.zeros(5)
     tokens = tokenize(text)
     for c in range(categories):
         for token in tokens:
-            probs[c] += math.log(theta_k_c(token, c))
-        probs[c] += math.log(Phi[c])
+            probs[c] += theta_k_c(token, c)
+        probs[c] += Phi[c]
     return probs.argmax() + 1
 
 def test(filename, Phi, Theta):
@@ -154,7 +166,7 @@ cm = confusion_matrix(actual_ys, predicted_ys)
 
 print(cm)
 
-# plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
-# plt.show()
+plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
+plt.savefig("Confusion-Matrix")
 
 print(classification_report(actual_ys, predicted_ys))
