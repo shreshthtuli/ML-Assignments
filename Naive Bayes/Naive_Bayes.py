@@ -49,9 +49,9 @@ def generate_vocab():
 
 def train(vocab, inputs):
     # Initialization
-    Phi = [0, 0, 0, 0, 0] # For y : 1 to 5
+    Phi = [0.0, 0.0, 0.0, 0.0, 0.0] # For y : 1 to 5
     Theta = np.empty((dicts, categories)) # 
-    Denom = [0, 0, 0, 0, 0]
+    Denom = [0.0, 0.0, 0.0, 0.0, 0.0]
     M = 0 # Number of training examples
     for i in range(dicts):
 	    for j in range(categories):
@@ -67,7 +67,7 @@ def train(vocab, inputs):
             Denom[c-1] += 1
     
     for i in range(categories):
-        Phi[i] = Phi[i]/M
+        Phi[i] = (Phi[i]+1)/(M+1)
     for k in range(dicts):
         for c in range(categories):
             Theta[k][c] = (Theta[k][c] + 1) / (Denom[c] + dicts)
@@ -76,12 +76,9 @@ def train(vocab, inputs):
 
 def theta_k_c(token, category):
     k = 0
-    try:    
-        k = vocab[token]
-    except:
-        return 1 / dicts
+    try: k = vocab[token]
+    except: return 1 / dicts
     return Theta[k][category]
-
     
 def classify(text):
     probs = np.array([0, 0, 0, 0, 0])
@@ -91,7 +88,7 @@ def classify(text):
             try:
                 probs[c] += math.log(Phi[c]) + math.log(theta_k_c(token, c))
             except:
-                print (Phi[c], theta_k_c(token, c))
+                print (c, Phi[c], theta_k_c(token, c))
     predicted_cat = probs.argmax() + 1
     return predicted_cat
 
@@ -112,6 +109,10 @@ vocab, inputs = generate_vocab()
 dicts = len(vocab)
 
 Phi, Theta = train(vocab, inputs)
+
+print(Phi)
+
+exit(0)
 
 print ("Accuracy = "), 
 print (test("test.json", Phi, Theta))
