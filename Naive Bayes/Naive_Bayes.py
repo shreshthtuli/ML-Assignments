@@ -39,12 +39,15 @@ def generate_vocab():
     seen = set()
     output = []
     inputs = []
+    counter = 0; limit = 1000
     for value in json_reader("train.json"):
         inputs.append(value)
         for word in tokenize(value["text"]):
             if word not in seen:
                 output.append(word)
                 seen.add(word)
+        counter+= 1
+        if counter == limit: break
     return (dict(zip(output, np.arange(0, len(output), 1))), inputs)
 
 def train(vocab, inputs):
@@ -67,7 +70,7 @@ def train(vocab, inputs):
             Denom[c-1] += 1
     
     for i in range(categories):
-        Phi[i] = (Phi[i]+1)/(M+1)
+        Phi[i] = (Phi[i]+1)/(M+5)
     for k in range(dicts):
         for c in range(categories):
             Theta[k][c] = (Theta[k][c] + 1) / (Denom[c] + dicts)
@@ -77,7 +80,7 @@ def train(vocab, inputs):
 def theta_k_c(token, category):
     k = 0
     try: k = vocab[token]
-    except: return 1 / dicts
+    except: return 1.0 / dicts
     return Theta[k][category]
     
 def classify(text):
@@ -101,6 +104,7 @@ def test(filename, Phi, Theta):
         precited_y = classify(view["text"])
         if(actual_y == precited_y):
             correct += 1
+        # if count > 10: break
     return float(correct)/float(count)
 
 
@@ -111,6 +115,7 @@ dicts = len(vocab)
 Phi, Theta = train(vocab, inputs)
 
 print(Phi)
+print(Theta)
 
 print ("Accuracy = "), 
 print (test("test.json", Phi, Theta))
