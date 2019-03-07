@@ -112,7 +112,5 @@ Phi, Theta = train(vocab, inputs)
 
 print(Phi)
 
-exit(0)
-
 print ("Accuracy = "), 
 print (test("test.json", Phi, Theta))
