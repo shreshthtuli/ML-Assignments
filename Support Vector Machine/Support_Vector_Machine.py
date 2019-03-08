@@ -32,6 +32,9 @@ def savefig(x, name="Image"):
     plt.imshow(x.reshape(28,28), cmap='gist_gray', interpolation='nearest')
     plt.savefig(name)
 
+def norm(x, y):
+    return np.linalg.norm(x - y)
+
 def linear_kernel(X, Y):
 	A = np.multiply(X, Y)
 	return A*A.T
