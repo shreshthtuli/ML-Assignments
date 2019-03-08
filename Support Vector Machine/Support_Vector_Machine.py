@@ -40,7 +40,7 @@ def gaussian_kernel(X, Y, gamma):
 	M = [map(float, [0]) * Y.shape[0] for _ in xrange(Y.shape[0])]
 	for i in xrange(Y.shape[0]):
 		for j in xrange(Y.shape[0]):
-			M[i][j] = Y.item(i)*Y.item(j)*gaussian(math.exp(-gamma * np.square(norm(X[i], X[j])).item()))
+			M[i][j] = Y.item(i)*Y.item(j)*(math.exp(-gamma * np.square(norm(X[i], X[j])).item()))
 	return M
 
 def weight_vector(X, Y, a):
