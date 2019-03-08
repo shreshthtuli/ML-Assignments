@@ -20,15 +20,16 @@ def parseData(filename):
     Y = read[:,-1]
     return X, Y
 
-def convertLinear(d):
+def convertLinear(X, Y, d, changeY=True):
     retY = Y[np.logical_or.reduce([Y == x for x in [d,d+1]])]
-    retY[retY == d] = -1
-    retY[retY == d+1] = 1
+    if changeY:
+        retY[retY == d] = -1
+        retY[retY == (d+1)%10] = 1
     retX = np.array(X[np.where(np.logical_or.reduce([Y == x for x in [d,d+1]]))[0], :])
     return retX, retY.T
 
 def savefig(x, name="Image"):
-    plt.imshow(x.reshape(28,28), cmap='grey', interpolation='nearest')
+    plt.imshow(x.reshape(28,28), cmap='gist_gray', interpolation='nearest')
     plt.savefig(name)
 
 def linear_kernel(X, Y):
@@ -36,28 +37,64 @@ def linear_kernel(X, Y):
 	return A*A.T
 
 def gaussian_kernel(X, Y, gamma):
-	M = [map(float, [0]) * m for _ in xrange(Y.shape[0])]
-	for i in xrange(m):
-		for j in xrange(m):
+	M = [map(float, [0]) * Y.shape[0] for _ in xrange(Y.shape[0])]
+	for i in xrange(Y.shape[0]):
+		for j in xrange(Y.shape[0]):
 			M[i][j] = Y.item(i)*Y.item(j)*gaussian(math.exp(-gamma * np.square(norm(X[i], X[j])).item()))
 	return M
 
 def weight_vector(X, Y, a):
-    mat = np.multiply(Y, a)
-    return np.sum(np.multiply(X, mat), axis = 0)
+    return np.sum(np.multiply(X, np.multiply(Y, a)), axis = 0)
 
-def intercept(X, Y, w):
-    mat = w*X.T
-    return -0.5*(np.max(np.matrix(mat[Y.T == -1])) + np.min(np.matrix(mat[Y.T == 1])))
+def intercept_l(X, Y, w):
+    temp = w*X.T
+    return -0.5*(np.max(np.matrix(temp[Y.T == -1])) + np.min(np.matrix(temp[Y.T == 1])))
+
+def intercept_g(X, Y, a):
+	mat = np.matrix([map(float, [0]) for _ in xrange(Y.shape[0])])
+	for i in xrange(m):
+		temp = 0
+		for j in xrange(m):
+			temp += a[j].value*Y.item(j)*math.exp(-2.5 * np.square(norm(X[i], X[j])).item())
+		mat[i] = temp
+	return -0.5*(np.max(np.matrix(mat[Y == -1])) + np.min(np.matrix(mat[Y == 1])))
+
 
 def train(X, Y, kernel_type, C=1, gamma=0.05):
     alpha = cvx.Variable((Y.shape[0], 1)) # Variable for optimization
     Q = linear_kernel(X, Y) if kernel_type == "linear" else gaussian_kernel(X, Y, gamma) # Kernel
     objective = cvx.Maximize(cvx.sum(alpha) - 0.5*(cvx.quad_form(alpha, Q))) # Objective funtion
-    constraints = [alpha >= 0, alpha <= C, (alpha.T*Y) == 0] # Constraints
+    constraints = [alpha >= 0, alpha <= C, alpha.T*Y == 0] # Constraints
         
     cvx.Problem(objective, constraints).solve() 
-    return alpha
+    print alpha.value
+    index = np.zeros((alpha.value.size, 1)) # indentify support vectors
+    for i in xrange(alpha.size):
+        index[i,0] = alpha[i].value
+        if alpha[i].value > 0.1:
+            print i
+            savefig(X[i].reshape(1, 784), "./sv/supportvector"+str(i)+"y"+str(Y[i])+".png")
+        
+    w = weight_vector(X, Y, index)
+    b = intercept_l(X, Y, w) if kernel_type == "linear" else intercept_g(X, Y, w)
+    return w, b
+
+def test(w, b, filename):
+    X1, Y1 = parseData(filename)
+    X1, Y1 = convertLinear(X1, Y1, d, False)
+    correct = 0
+    total = 0
+    print (w.shape, X1.shape, Y1.shape)
+    for i in xrange(Y1.shape[0]):
+        val = float(w*(X1[i].reshape(1, X.shape[1]).T)) + b
+        clsfy = d+1 if val >= 0 else d
+        if clsfy == Y1.item(i):
+            correct += 1
+        else:
+            savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
+        total += 1
+    
+    return float(correct) / float(total)
 
 
 # Read data from file
@@ -65,35 +102,12 @@ X, Y = parseData("train.csv")
 
 d = 0
 
-Xd, Yd = convertLinear(d)
+Xd, Yd = convertLinear(X, Y, d)
 
-alpha = train(Xd, Yd, "linear", 1, 0)
-print alpha.value
-index = np.zeros((alpha.value.size, 1)) # indentify support vectors
-for i in xrange(alpha.size):
-	index[i,0] = alpha[i].value
-	if alpha[i].value > 0.1 and alpha[i].value < 499.9:
-		print i
+w, b = train(Xd, Yd, "linear", 1, 0)
 
-# Calculate weight vector
-w = weight_vector(Xd, Yd, index)
+print "accuracy (Linear Kernel) = ", test(w, b, "test.csv")
 
-# Calculate intercept b
-b = intercept(Xd, Yd, w)
+w, b = train(Xd, Yd, "gaussian", 1, 0.005)
 
-# Test on test data
-X1, Y1 = parseData("test.csv")
-correct = 0
-count = 0
-for i in xrange(Y1.shape[0]):
-    val = float(w*X1[i].T) + b
-    print val
-    if val >= 0:
-        clsfy = d+1
-    else:
-        clsfy = d
-    if clsfy == Y1.item(i):
-        correct += 1
-    count += 1
-
-print "accuracy (Linear Kernel) = ", float(correct) / float(count)
+print "accuracy (Linear Kernel) = ", test(w, b, "test.csv")
