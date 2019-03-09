@@ -1,0 +1,58 @@
+Data parse complete...
+D =  0
+---Binary Classification---
+
+ConvOpt results:
+Accuracy (Linear Kernel) =  97.3958333333
+Bias  1.23538922202
+nSV  0
+Accuracy (Gaussian Kernel) =  100.0
+Bias  -0.05326981557736664
+nSV  134
+
+LibSVM results:
+*
+optimization finished, #iter = 96
+nu = 0.000604
+obj = -0.116352, rho = -0.498245
+nSV = 32, nBSV = 0
+Total nSV = 32
+Accuracy (Linear Kernel) =  100.0
+*
+optimization finished, #iter = 375
+nu = 0.102269
+obj = -20.011282, rho = 0.695674
+nSV = 224, nBSV = 3
+Total nSV = 224
+Accuracy (Gaussian Kernel) =  99.4791666667
+---Multiclass Classification---
+
+ConvOpt results:
+Multiclass Accuracy (Linear Kernel) =  82.1075740944
+Multiclass Accuracy (Gussian Kernel) =  67.3984632272
+
+LibSVM results:
+Multiclass Accuracy (Linear Kernel) =  89.2425905598
+Multiclass Accuracy (Gussian Kernel) =  92.7552140505
+Confusion Matrix:
+[[ 78   0   0   0   0   1   1   0   0   0]
+ [  0 111   0   0   0   0   0   0   1   0]
+ [  1   0  92   1   1   0   0   2   5   0]
+ [  0   0   1  84   0   4   1   2   1   2]
+ [  1   0   1   0  95   0   0   0   1   5]
+ [  1   0   1   1   0  77   0   0   0   1]
+ [  2   0   0   0   1   1  74   0   0   0]
+ [  0   1   3   0   2   0   0  84   0   1]
+ [  1   0   3   3   0   3   0   0  71   1]
+ [  0   0   1   0   1   0   0   4   2  79]]
+Validation:
+Validation Accuracy with C =  1e-05  is :  10.1063829787
+Test Accuracy with C =  1e-05  is :  9.54994511526
+Validation Accuracy with C =  0.001  is :  10.1063829787
+Test Accuracy with C =  0.001  is :  9.54994511526
+Validation Accuracy with C =  1  is :  90.9574468085
+Test Accuracy with C =  1  is :  91.7672886937
+Validation Accuracy with C =  5  is :  90.9574468085
+Test Accuracy with C =  5  is :  91.9868276619
+Validation Accuracy with C =  10  is :  90.9574468085
+Test Accuracy with C =  10  is :  91.9868276619

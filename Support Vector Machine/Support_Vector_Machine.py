@@ -280,21 +280,24 @@ print '\033[95m'+"---Multiclass Classification---"+'\033[0m'
 
 # Test data
 Xtest, Ytest = parseData(testfile)
+# Training accuracy
 
 print
 print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
 # Linear SVM Model
 w, b = train_multiclass_cvx(X, Y, 'linear')
-acc, pred, actual = test_multiclass_cvx(w, b, Xtest, Ytest)
-
-print "Multiclass Accuracy (Linear Kernel) = ", acc*100
+acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
+acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
+print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
+print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
 
 # Gaussian SVM Model
 w, b = train_multiclass_cvx(X, Y, 'gaussian')
-acc, pred, actual = test_multiclass_cvx(w, b, Xtest, Ytest)
-
-print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
+acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
+acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
+print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
+print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
 
 
 ########## MULTICLASS LIBSVM ##########
@@ -303,19 +306,21 @@ print '\033[94m'+"LibSVM results:"+'\033[0m'
 
 # Linear SVM Model
 models = train_multiclass(X, Y, '-t 0 -c 1 -q')
-acc, pred, actual = test_multiclass(models, Xtest, Ytest)
-
-print "Multiclass Accuracy (Linear Kernel) = ", acc*100
+acc, pred, actual = test_multiclass(models, X, Y)
+acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
+print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
+print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
 
 # Gaussian SVM Model
 models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
-acc, pred, actual = test_multiclass(models, Xtest, Ytest)
-
-print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
+acc, pred, actual = test_multiclass(models, X, Y)
+acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
+print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
+print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
 
 ########## CONFUSION MATRIX ##########
 
-cm = confusion_matrix(actual, pred)
+cm = confusion_matrix(actual1, pred1)
 
 print '\033[94m'+"Confusion Matrix:"+'\033[0m'
 print(cm)
