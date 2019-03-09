@@ -203,15 +203,17 @@ print "Accuracy (Gaussian Kernel) = ", accuracy[0]
 
 # Multiclass model
 
+Xtest, Ytest = parseData(testfile)
+
 # Linear SVM Model
 # models = train_multiclass(X, Y, '-t 0 -c 1 -q')
-# acc = test_multiclass(models, testfile)
+# acc = test_multiclass(models, Xtest, Ytest)
 
 # print "Multiclass Accuracy (Linear Kernel) = ", acc*100
 
 # Gaussian SVM Model
 models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
-acc, pred, actual = test_multiclass(models, testfile)
+acc, pred, actual = test_multiclass(models, Xtest, Ytest)
 
 print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
 
@@ -229,8 +231,6 @@ Yv = Y[0:Y.size[0]/10:1]
 
 Xtrain = X[X.size[0]/10::1]
 Ytrain = Y[Y.size[0]/10::1]
-
-Xtest, Ytest = parseData(testfile)
 
 for i in [0.00001, 0.001, 1, 5, 10]:
     models = train_multiclass(Xtrain, Ytrain, '-g 0.05 -c '+str(i)+' -q')
