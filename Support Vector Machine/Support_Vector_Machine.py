@@ -97,35 +97,36 @@ def test(w, b, d, e, filename):
     
     return float(correct) / float(total)
 
-def train_multiclass(X, Y, kernel_type, param):
-    w = np.empty((10, 10),dtype=object)
-    b = np.empty((10, 10))
+def train_multiclass(X, Y, param):
+    models = np.empty((10, 10),dtype=object)
     for i in range(10):
         for j in range(i+1,10):
-            Xd, Yd = convertLinear(X, Y, i, j)
-            w[i][j], b[i][j] = train(Xd, Yd, kernel_type, C, gamma)
-            print("trained ("+str(i)+", "+str(j)+")")
-    return w, b
+            Xd, Yd = convertLinear(X, Y, i, j, True)
+            train_data, train_labels = listify(Xd, Yd)
+            m = svm_train(train_labels, train_data, param)
+            models[i][j] = m
+    return models
 
-def classify(svm_model, x):
+def classify(models, x):
     wins = np.zeros(10)
     for i in range(10):
         for j in range(i+1, 10):
-            svm_predict()
-            clsfy = j if val >= 0 else i
+            predicted_label,a,b = svm_predict([1], x, models[i][j], "-q")
+            clsfy = j if predicted_label[0] >= 0 else i
             wins[clsfy] += 1
     return wins.argmax()
 
-def test_multiclass(w, b, filename):
+def test_multiclass(models, filename):
     X1, Y1 = parseData(filename)
+    test_data, test_labels = listify(X1, Y1)
     correct = 0
     total = 0
     for i in xrange(Y1.shape[0]):
-        clsfy = classify(w, b, X1[i])
-        if clsfy == Y1.item(i):
+        clsfy = classify(models, [test_data[i]])
+        if clsfy == test_labels[i]:
             correct += 1
-        # else:
-        #     savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
+        else:
+            savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total)
@@ -137,21 +138,20 @@ print("Data parse complete...")
 
 d = 0
 
+print "D = ", d
+print "ConvOpt results:"
+
 Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
+# Linear SVM Model
 w, b = train(Xd, Yd, "linear", 1, 0)
-
 print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, "test2.csv")
 
+# Gaussian SVM Model
 w, b = train(Xd, Yd, "gaussian", 1, 0.05)
-
 print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, "test2.csv")
 
-# w, b = train_multiclass(X, Y, "linear", 1, 0)
-
-# acc = test_multiclass(w, b, "test2.csv")
-
-# print "Multiclass Accuracy (Linear Kernel) = ", acc
+print "LibSVM results:"
 
 train_data, train_labels = listify(Xd, Yd)
 
@@ -159,17 +159,25 @@ X1, Y1 = convertLinear(X, Y, d, (d+1)%10, True)
 test_data, test_labels = listify(X1, Y1)
 
 # Linear SVM Model
-# model = svm.svm_train(train_labels, train_data,'-t 0 -c 1')
-# svm.svm_predict(test_labels, test_data, model)
+model = svm_train(train_labels, train_data,'-q -t 0 -c 1')
+[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model. "-q")
+print "Accuracy (Linear Kernel) = ", accuracy
 
 # Gaussian SVM Model
-prob = svm_problem(test_labels, test_data)
-param = svm_parameter('-g 0.05 -c 4')
-param.C = 1
+model = svm_train(train_labels, train_data,'-q -g 0.05 -c 1')
+[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
+print "Accuracy (Gaussian Kernel) = ", accuracy
 
-model = svm_train(prob, param)
-[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model)
-# print predicted_label
-print param.weight
-print param
+# Multiclass model
 
+# Linear SVM Model
+models = train_multiclass(X, Y, '-t 0 -c 1 -q')
+acc = test_multiclass(models, "test2.csv")
+
+print "Multiclass Accuracy (Linear Kernel) = ", acc
+
+# Gaussian SVM Model
+models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
+acc = test_multiclass(models, "test2.csv")
+
+print "Multiclass Accuracy (Gussian Kernel) = ", acc
