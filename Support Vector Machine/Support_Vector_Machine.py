@@ -66,8 +66,21 @@ def gaussian_kernel(X, Y, gamma):
 def weight_vector(X, Y, a):
     return np.sum(np.multiply(X, np.multiply(Y, a)), axis = 0)
 
+def gaussian_weight(X, Ya, Xn):
+    K = np.array(gaussian_kernel(Xn, X, 0.05))
+    print K.shape, Ya.T.shape
+    res = K.dot(Ya.T)
+    return np.sum(res)/res.size
+
 def intercept(x, y, w):
-	return y - w*(x.reshape(1,784).T)
+	return (y - w*(x.reshape(1,784).T)).item(0)
+
+def gaussian_intercept(X, Y, alpha):
+    K = np.array(gaussian_kernel(X, X, 0.05))
+    a = np.multiply(Y, alpha.value)
+    res = (Y - a.T.dot(K).transpose())
+    res = np.sum(res)/res.size
+    return res
 
 def listify(X, Y):
     retx = []
@@ -97,18 +110,19 @@ def train(X, Y, kernel_type, C=1, gamma=0.05):
             # print i
             sv = i; count += 1
             # savefig(X[i].reshape(1, 784), "./sv/supportvector"+str(i)+"y"+str(Y[i])+".png")
-    print "Num support vectors : ", count
+    
     w = weight_vector(X, Y, index)
-    b = intercept(X[sv], Y[sv], w)
-    return w, b, alpha
+    b = intercept(X[sv], Y[sv], w) if kernel_type == "linear" else gaussian_intercept(X, Y, alpha)
+    return w, b, alpha, count
 
-def test(w, b, d, e, filename, alpha, Y, kernel_type):
+def test(w, b, d, e, filename, alpha, X, Y, kernel_type):
     X1, Y1 = parseData(filename)
     X1, Y1 = convertLinear(X1, Y1, d, e, False)
     correct = 0
     total = 0
+    Ya = np.multiply(Y, alpha.value).T if kernel_type != "linear" else []
     for i in xrange(Y1.shape[0]):
-        val = float(w*(X1[i].reshape(1, X.shape[1]).T)) + b if kernel_type == "linear" else np.sum(np.multiply(alpha, np.multiply(Y, gaussian_kernel(X1[i].reshape(1, X.shape[1]), X, 0.05))))
+        val = float(w*(X1[i].reshape(1, X.shape[1]).T)) + b# if kernel_type == "linear" else gaussian_weight(X, Ya, X1[i]) + b
         clsfy = e if val >= 0 else d
         if clsfy == Y1.item(i):
             correct += 1
@@ -117,6 +131,48 @@ def test(w, b, d, e, filename, alpha, Y, kernel_type):
         total += 1
     
     return float(correct) / float(total)
+
+def train_multiclass_cvx(X, Y, kernel):
+    w = np.empty((10, 10),dtype=object)
+    b = np.empty((10, 10))
+    for i in range(10):
+        for j in range(i+1,10):
+            Xd, Yd = convertLinear(X, Y, i, j, True)
+            w[i][j], b[i][j], a, c = train(Xd, Yd, kernel, 1, 0.05)
+    return w, b
+
+def classify_cvx(w, b, x):
+    wins = np.zeros(10)
+    confidence = np.zeros(10)
+    for i in range(10):
+        for j in range(i+1, 10):
+            val = float(w[i][j]*(x.T)) + b[i][j]
+            clsfy = j if val >= 0 else i
+            wins[clsfy] += 1
+            confidence[clsfy] += math.fabs(val)
+    maxes = np.argwhere(wins == np.amax(wins))
+    if maxes.size == 1:
+        argmax = maxes[0][0]
+    else:
+        argmax = np.argwhere(confidence == np.amax(confidence[maxes]))[0][0]
+    return argmax, wins
+
+def test_multiclass_cvx(w, b, X1, Y1):
+    correct = 0
+    total = 0
+    predicted = []
+    actual = []
+    for i in xrange(Y1.shape[0]):
+        clsfy, wins = classify_cvx(w, b, X1[i])
+        predicted.append(clsfy); actual.append(Y1.item(i))
+        if clsfy == Y1.item(i):
+            correct += 1
+        # else:
+        #     print correct, total, wins, clsfy, test_labels[i]
+        #     savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
+        total += 1
+    
+    return float(correct) / float(total), predicted, test_labels
 
 def train_multiclass(X, Y, param):
     models = np.empty((10, 10),dtype=object)
@@ -136,12 +192,12 @@ def classify(models, x):
             predicted_label,a,conf = svm_predict([1], x, models[i][j], "-q")
             clsfy = j if predicted_label[0] >= 0 else i
             wins[clsfy] += 1
-            confidence[clsfy] += conf
+            confidence[clsfy] += math.fabs(conf[0][0])
     maxes = np.argwhere(wins == np.amax(wins))
     if maxes.size == 1:
         argmax = maxes[0][0]
     else:
-        argmax = np.argwhere(confidence == np.amax(condifidence[maxes]))[0][0]
+        argmax = np.argwhere(confidence == np.amax(confidence[maxes]))[0][0]
     return argmax, wins
 
 def test_multiclass(models, X1, Y1):
@@ -154,15 +210,15 @@ def test_multiclass(models, X1, Y1):
         predicted.append(clsfy)
         if clsfy == test_labels[i]:
             correct += 1
-        else:
-            print correct, total, wins, clsfy, test_labels[i]
-            savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
+        # else:
+        #     print correct, total, wins, clsfy, test_labels[i]
+        #     savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total), predicted, test_labels
 
 trainfile = "train.csv"
-testfile = "test2.csv"
+testfile = "test.csv"
 
 # Read data from file
 X, Y = parseData(trainfile)
@@ -171,19 +227,35 @@ print("Data parse complete...")
 d = 0
 
 print "D = ", d
-print "ConvOpt results:"
+
+print '\033[95m'+"---Binary Classification---"+'\033[0m'
+
+########## BINARY CONVOPT ##########
+
+print
+print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
 Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
 # Linear SVM Model
-w, b, a = train(Xd, Yd, "linear", 1, 0)
-print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile, X, Y, "linear")*100
+w, b, a, n = train(Xd, Yd, "linear", 1, 0)
+print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "linear")*100
+# print "Weight ", w
+print "Bias ", b
+print "nSV ", n
 
 # Gaussian SVM Model
-# w, b, a = train(Xd, Yd, "gaussian", 1, 0.05)
-# print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile, X, a, "gaussian")*100
+w, b, a, n = train(Xd, Yd, "gaussian", 1, 0.05)
+print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "gaussian")*100
+# print "Weight ", w
+print "Bias ", b
+print "nSV ", n
 
-print "LibSVM results:"
+
+########## BINARY LIBSVM ##########
+
+print
+print '\033[94m'+"LibSVM results:"+'\033[0m'
 
 train_data, train_labels = listify(Xd, Yd)
 
@@ -192,24 +264,48 @@ X1, Y1 = convertLinear(Xt, Yt, d, (d+1)%10, True)
 test_data, test_labels = listify(X1, Y1)
 
 # Linear SVM Model
-model = svm_train(train_labels, train_data,'-q -t 0 -c 1')
+model = svm_train(train_labels, train_data,'-t 0 -c 1')
 [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
 print "Accuracy (Linear Kernel) = ", accuracy[0]
+# print "Weight ", w
 
 # Gaussian SVM Model
-model = svm_train(train_labels, train_data,'-q -g 0.05 -c 1')
+model = svm_train(train_labels, train_data,'-g 0.05 -c 1')
 [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
 print "Accuracy (Gaussian Kernel) = ", accuracy[0]
 
-# Multiclass model
+########## MULTICLASS CONVOPT ##########
 
+print '\033[95m'+"---Multiclass Classification---"+'\033[0m'
+
+# Test data
 Xtest, Ytest = parseData(testfile)
 
-# Linear SVM Model
-# models = train_multiclass(X, Y, '-t 0 -c 1 -q')
-# acc = test_multiclass(models, Xtest, Ytest)
+print
+print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
-# print "Multiclass Accuracy (Linear Kernel) = ", acc*100
+# Linear SVM Model
+w, b = train_multiclass_cvx(X, Y, 'linear')
+acc, pred, actual = test_multiclass_cvx(w, b, Xtest, Ytest)
+
+print "Multiclass Accuracy (Linear Kernel) = ", acc*100
+
+# Gaussian SVM Model
+w, b = train_multiclass_cvx(X, Y, 'gaussian')
+acc, pred, actual = test_multiclass_cvx(w, b, Xtest, Ytest)
+
+print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
+
+
+########## MULTICLASS LIBSVM ##########
+print
+print '\033[94m'+"LibSVM results:"+'\033[0m'
+
+# Linear SVM Model
+models = train_multiclass(X, Y, '-t 0 -c 1 -q')
+acc, pred, actual = test_multiclass(models, Xtest, Ytest)
+
+print "Multiclass Accuracy (Linear Kernel) = ", acc*100
 
 # Gaussian SVM Model
 models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
@@ -217,20 +313,26 @@ acc, pred, actual = test_multiclass(models, Xtest, Ytest)
 
 print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
 
+########## CONFUSION MATRIX ##########
+
 cm = confusion_matrix(actual, pred)
 
+print '\033[94m'+"Confusion Matrix:"+'\033[0m'
 print(cm)
 
-plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
+plot_confusion_matrix(cm, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 plt.savefig("Confusion-Matrix")
 
-# Validation
 
-Xv = X[0:X.size[0]/10:1]
-Yv = Y[0:Y.size[0]/10:1]
+########## VALIDATION ##########
 
-Xtrain = X[X.size[0]/10::1]
-Ytrain = Y[Y.size[0]/10::1]
+Xv = X[0:X.shape[0]/10:1]
+Yv = Y[0:Y.shape[0]/10:1]
+
+Xtrain = X[X.shape[0]/10::1]
+Ytrain = Y[Y.shape[0]/10::1]
+
+print '\033[94m'+"Validation:"+'\033[0m'
 
 for i in [0.00001, 0.001, 1, 5, 10]:
     models = train_multiclass(Xtrain, Ytrain, '-g 0.05 -c '+str(i)+' -q')
