@@ -114,7 +114,7 @@ def classify(models, x):
             predicted_label,a,b = svm_predict([1], x, models[i][j], "-q")
             clsfy = j if predicted_label[0] >= 0 else i
             wins[clsfy] += 1
-    return wins.argmax()
+    return wins.argmax(), wins
 
 def test_multiclass(models, filename):
     X1, Y1 = parseData(filename)
@@ -122,18 +122,21 @@ def test_multiclass(models, filename):
     correct = 0
     total = 0
     for i in xrange(Y1.shape[0]):
-        clsfy = classify(models, [test_data[i]])
+        clsfy, wins = classify(models, [test_data[i]])
         if clsfy == test_labels[i]:
             correct += 1
         else:
-            savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
+            print correct, total, wins, clsfy, test_labels[i]
+            # savefig(X1[i], "./wrong/wrong"+str(total)+"a"+str(int(test_labels[i]))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total)
 
+trainfile = "train.csv"
+testfile = "test2.csv"
 
 # Read data from file
-X, Y = parseData("train2.csv")
+X, Y = parseData(trainfile)
 print("Data parse complete...")
 
 d = 0
@@ -145,39 +148,40 @@ Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
 # Linear SVM Model
 w, b = train(Xd, Yd, "linear", 1, 0)
-print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, "test2.csv")
+print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile)*100
 
 # Gaussian SVM Model
 w, b = train(Xd, Yd, "gaussian", 1, 0.05)
-print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, "test2.csv")
+print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile)*100
 
 print "LibSVM results:"
 
 train_data, train_labels = listify(Xd, Yd)
 
-X1, Y1 = convertLinear(X, Y, d, (d+1)%10, True)
+Xt, Yt = parseData(testfile)
+X1, Y1 = convertLinear(Xt, Yt, d, (d+1)%10, True)
 test_data, test_labels = listify(X1, Y1)
 
 # Linear SVM Model
 model = svm_train(train_labels, train_data,'-q -t 0 -c 1')
-[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model. "-q")
-print "Accuracy (Linear Kernel) = ", accuracy
+[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
+print "Accuracy (Linear Kernel) = ", accuracy[0]
 
 # Gaussian SVM Model
 model = svm_train(train_labels, train_data,'-q -g 0.05 -c 1')
 [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
-print "Accuracy (Gaussian Kernel) = ", accuracy
+print "Accuracy (Gaussian Kernel) = ", accuracy[0]
 
 # Multiclass model
 
 # Linear SVM Model
 models = train_multiclass(X, Y, '-t 0 -c 1 -q')
-acc = test_multiclass(models, "test2.csv")
+acc = test_multiclass(models, testfile)
 
-print "Multiclass Accuracy (Linear Kernel) = ", acc
+print "Multiclass Accuracy (Linear Kernel) = ", acc*100
 
 # Gaussian SVM Model
 models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
-acc = test_multiclass(models, "test2.csv")
+acc = test_multiclass(models, testfile)
 
-print "Multiclass Accuracy (Gussian Kernel) = ", acc
+print "Multiclass Accuracy (Gussian Kernel) = ", acc*100
