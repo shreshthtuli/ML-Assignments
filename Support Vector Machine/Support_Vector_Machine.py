@@ -20,12 +20,12 @@ def parseData(filename):
     Y = read[:,-1]
     return X, Y
 
-def convertLinear(X, Y, d, e=(d+1)%10, changeY=True):
-    retY = Y[np.logical_or.reduce([Y == x for x in [d,d+1]])]
+def convertLinear(X, Y, d, e, changeY=True):
+    retY = Y[np.logical_or.reduce([Y == x for x in [d,e]])]
     if changeY:
         retY[retY == d] = -1
         retY[retY == e] = 1
-    retX = np.array(X[np.where(np.logical_or.reduce([Y == x for x in [d,d+1]]))[0], :])
+    retX = np.array(X[np.where(np.logical_or.reduce([Y == x for x in [d,e]]))[0], :])
     return retX, retY.T
 
 def savefig(x, name="Image"):
@@ -54,13 +54,22 @@ def intercept_l(X, Y, w):
     return -0.5*(np.max(np.matrix(temp[Y.T == -1])) + np.min(np.matrix(temp[Y.T == 1])))
 
 def intercept_g(X, Y, a):
-	mat = np.matrix([map(float, [0]) for _ in xrange(Y.shape[0])])
-	for i in xrange(Y.shape[0]):
+    	m = Y.shape[0]
+	mat = np.matrix([map(float, [0]) for _ in xrange(m)])
+	for i in xrange(m):
+		if(a[i].value > 499.9 or a[i].value < 0.1):
+			continue
 		temp = 0
-		for j in xrange(Y.shape[0]):
-			temp += a[j].value*Y.item(j)*math.exp(-2.5 * np.square(norm(X[i], X[j])).item())
+		for j in xrange(m):
+			temp += a[j].value*Y.item(j)*gaussian(X[i], X[j])
 		mat[i] = temp
-	return -0.5*(np.max(np.matrix(mat[Y == -1])) + np.min(np.matrix(mat[Y == 1])))
+	maxmat = np.matrix(mat[Y > 0])
+	minmat = np.matrix(mat[Y < 0])
+	maxm = np.matrix(maxmat[maxmat != 0])
+	minm = np.matrix(minmat[minmat != 0])
+	max = np.max(minm)
+	min = np.min(maxm)
+	return -0.5*(max + min)
 
 
 def train(X, Y, kernel_type, C=1, gamma=0.05):
