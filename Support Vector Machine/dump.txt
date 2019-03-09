@@ -1,0 +1,55 @@
+Data parse complete...
+D =  0
+---Binary Classification---
+
+ConvOpt results:
+Accuracy (Linear Kernel) =  99.9054373522
+Bias  0.68507907023
+nSV  6
+Accuracy (Gaussian Kernel) =  99.7635933806
+Bias  -0.005726411681900833
+nSV  241
+
+LibSVM results:
+*
+optimization finished, #iter = 344
+nu = 0.000579
+obj = -1.157460, rho = -0.787314
+nSV = 53, nBSV = 0
+Total nSV = 53
+Accuracy (Linear Kernel) =  99.9054373522
+*.*
+optimization finished, #iter = 1099
+nu = 0.025473
+obj = -53.050160, rho = 0.752569
+nSV = 745, nBSV = 14
+Total nSV = 745
+Accuracy (Gaussian Kernel) =  99.8108747045
+---Multiclass Classification---
+
+ConvOpt results:
+Multiclass Training Accuracy (Linear Kernel) =  92.89
+Multiclass Test Accuracy (Linear Kernel) =  88.85
+Multiclass Training Accuracy (Gaussian Kernel) =  65.195
+Multiclass Test Accuracy (Gaussian Kernel) =  66.29
+
+LibSVM results:
+Multiclass Training Accuracy (Linear Kernel) =  98.705
+Multiclass Test Accuracy (Linear Kernel) =  92.73
+Multiclass Training Accuracy (Gaussian Kernel) =  99.92
+Multiclass Test Accuracy (Gaussian Kernel) =  97.24
+Confusion Matrix:
+[[ 969    0    1    0    0    3    4    1    2    0]
+ [   0 1121    3    2    1    2    2    0    3    1]
+ [   4    0 1000    4    2    0    1    6   15    0]
+ [   0    0    8  985    0    4    0    6    5    2]
+ [   0    0    4    0  962    0    6    0    2    8]
+ [   2    0    3    6    1  866    7    1    5    1]
+ [   6    3    0    0    4    4  939    0    2    0]
+ [   1    4   19    2    4    0    0  987    2    9]
+ [   4    0    3   10    2    5    1    3  943    3]
+ [   4    4    3    8   13    4    0    7   14  952]]
+Validation:
+Validation Accuracy with C =  1e-05  is :  8.8
+Test Accuracy with C =  1e-05  is :  10.1
+Validation Accuracy with C =  0.001  is :  8.8

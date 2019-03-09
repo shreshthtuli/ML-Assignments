@@ -217,8 +217,8 @@ def test_multiclass(models, X1, Y1):
     
     return float(correct) / float(total), predicted, test_labels
 
-trainfile = "train2.csv"
-testfile = "test2.csv"
+trainfile = "train.csv"
+testfile = "test.csv"
 
 # Read data from file
 X, Y = parseData(trainfile)

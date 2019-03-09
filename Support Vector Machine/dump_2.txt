@@ -28,12 +28,16 @@ Accuracy (Gaussian Kernel) =  99.4791666667
 ---Multiclass Classification---
 
 ConvOpt results:
-Multiclass Accuracy (Linear Kernel) =  82.1075740944
-Multiclass Accuracy (Gussian Kernel) =  67.3984632272
+Multiclass Training Accuracy (Linear Kernel) =  94.7396386823
+Multiclass Test Accuracy (Linear Kernel) =  82.1075740944
+Multiclass Training Accuracy (Linear Kernel) =  67.215727949
+Multiclass Test Accuracy (Linear Kernel) =  67.3984632272
 
 LibSVM results:
-Multiclass Accuracy (Linear Kernel) =  89.2425905598
-Multiclass Accuracy (Gussian Kernel) =  92.7552140505
+Multiclass Training Accuracy (Linear Kernel) =  100.0
+Multiclass Test Accuracy (Linear Kernel) =  89.2425905598
+Multiclass Training Accuracy (Linear Kernel) =  100.0
+Multiclass Test Accuracy (Linear Kernel) =  92.7552140505
 Confusion Matrix:
 [[ 78   0   0   0   0   1   1   0   0   0]
  [  0 111   0   0   0   0   0   0   1   0]
