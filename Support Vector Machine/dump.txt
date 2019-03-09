@@ -53,3 +53,10 @@ Validation:
 Validation Accuracy with C =  1e-05  is :  8.8
 Test Accuracy with C =  1e-05  is :  10.1
 Validation Accuracy with C =  0.001  is :  8.8
+Test Accuracy with C =  0.001  is :  10.1
+Validation Accuracy with C =  1  is :  97.15
+Test Accuracy with C =  1  is :  97.18
+Validation Accuracy with C =  5  is :  97.25
+Test Accuracy with C =  5  is :  97.28
+Validation Accuracy with C =  10  is :  97.25
+Test Accuracy with C =  10  is :  97.28
