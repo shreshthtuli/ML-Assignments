@@ -53,6 +53,9 @@ def intercept_l(X, Y, w):
     temp = w*X.T
     return -0.5*(np.max(np.matrix(temp[Y.T == -1])) + np.min(np.matrix(temp[Y.T == 1])))
 
+def gaussian(x, y):
+    	return math.exp(-2.5 * np.square(norm(x, y)).item())
+
 def intercept_g(X, Y, a):
     	m = Y.shape[0]
 	mat = np.matrix([map(float, [0]) for _ in xrange(m)])
@@ -83,7 +86,7 @@ def train(X, Y, kernel_type, C=1, gamma=0.05):
     index = np.zeros((alpha.value.size, 1)) # indentify support vectors
     for i in xrange(alpha.size):
         index[i,0] = alpha[i].value
-        if alpha[i].value > 0.1:
+        if alpha[i].value > 0.1 and alpha[i].value <= 1:
             print i
             savefig(X[i].reshape(1, 784), "./sv/supportvector"+str(i)+"y"+str(Y[i])+".png")
         
@@ -111,20 +114,18 @@ def train_multiclass(X, Y, kernel_type, C=1, gamma=0.05):
     w = np.empty((10, 10))
     b = np.empty((10, 10))
     for i in range(10):
-        for j in range(10):
-            if i != j:
-                Xd, Yd = convertLinear(X, Y, i, j)
-                w[i][j], b[i][j] = train(X, Y, kernel_type, X, gamma)
+        for j in range(i+1,10):
+            Xd, Yd = convertLinear(X, Y, i, j)
+            w[i][j], b[i][j] = train(X, Y, kernel_type, X, gamma)
     return w, b
 
 def classify(w, b, x):
     wins = np.zeros(10)
     for i in range(10):
-        for j in range(10):
-            if i != j:
-                val = float(w*(x.reshape(1, 784).T)) + b
-                clsfy = j if val >= 0 else x
-                wins[clsdfy] += 1
+        for j in range(i+1, 10):
+            val = float(w*(x.reshape(1, 784).T)) + b
+            clsfy = j if val >= 0 else x
+            wins[clsdfy] += 1
     return wins.argmax() + 1
 
 def test_multiclass(w, b, filename):
