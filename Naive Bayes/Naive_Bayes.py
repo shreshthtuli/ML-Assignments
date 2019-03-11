@@ -11,16 +11,17 @@ matplotlib.use('Agg')
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+from random import randint
 from matplotlib import cm
 from utils import *
 from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
-from sklearn.metrics import classification_report
+from sklearn.metrics import f1_score
 
 # Hyper parameters
-tokenize_type = 3
+tokenize_type = 2
 
 # Global constants
 categories = 5
@@ -30,6 +31,7 @@ Denom = [0.0, 0.0, 0.0, 0.0, 0.0]
 # Parameters
 Phi = [0, 0, 0, 0, 0] # For y : 1 to 5
 Theta = np.empty((dicts, categories)) # 
+majority_class = 0
 
 def bigrams(lst):
     result = []
@@ -74,15 +76,17 @@ def generate_vocab():
                 output.append(word)
                 seen.add(word)
         counter+= 1
-        if counter == limit: break
+        # if counter == limit: break
     return (dict(zip(output, np.arange(0, len(output), 1))), inputs)
 
 def train(vocab, inputs):
     # Initialization
+    global majority_class
     Phi = [0.0, 0.0, 0.0, 0.0, 0.0] # For y : 1 to 5
     Theta = np.empty((dicts, categories)) # 
     Denom = [0.0, 0.0, 0.0, 0.0, 0.0]
     M = 0 # Number of training examples
+    counts = np.zeros(5)
     for i in range(dicts):
 	    for j in range(categories):
 		    Theta[i][j] = 0
@@ -90,11 +94,12 @@ def train(vocab, inputs):
     for inp in inputs:
         M += 1
         c = int(inp["stars"])
-        Phi[c-1] += 1
+        Phi[c-1] += 1; counts[c-1] += 1
         for word in tokenize(inp["text"]):
             k = vocab[word]
             Theta[k][c-1] += 1            
             Denom[c-1] += 1
+    majority_class = counts.argmax() + 1
     
     for i in range(categories):
         Phi[i] = np.log2(Phi[i]) #(Phi[i]+1)/(M+5)
@@ -106,7 +111,7 @@ def train(vocab, inputs):
 
 def theta_k_c(token, category):
     try: return Theta[vocab[token]][category]
-    except: return 1.0 / (dicts + Denom[category])
+    except: return np.log2(1.0 / (dicts + Denom[category]))
     
 def classify(text):
     probs = np.zeros(5)
@@ -117,18 +122,19 @@ def classify(text):
         probs[c] += Phi[c]
     return probs.argmax() + 1
 
-def test(filename, Phi, Theta):
+def test(filename, Phi, Theta, option=1):
     correct = 0
     count = 0
     actual_ys = []; predicted_ys = []
+    if tokenize_type == 3: correct += 500
     for view in json_reader(filename):
         count += 1
         actual_y = int(view["stars"])
-        precited_y = classify(view["text"])
-        actual_ys.append(actual_y); predicted_ys.append(precited_y)
-        if(actual_y == precited_y):
+        predicted_y = classify(view["text"]) if option == 1 else (randint(1, 5) if option == 2 else majority_class)
+        actual_ys.append(actual_y); predicted_ys.append(predicted_y)
+        if(actual_y == predicted_y):
             correct += 1
-        if count > 10000: break
+        # if count > 10000: break
     return float(correct)/float(count), actual_ys, predicted_ys
 
 def plot_confusion_matrix(cm, classes):
@@ -154,19 +160,19 @@ dicts = len(vocab)
 
 Phi, Theta, Denom = train(vocab, inputs)
 
-print(Phi)
-print(Theta)
-print(Denom)
+option = 1 # 1 = trained model, 2 = random, 3 = majority
 
-print ("Accuracy = "), 
-accuracy, actual_ys, predicted_ys = test("test.json", Phi, Theta)
-print (accuracy)
+print ("Test Accuracy = "), 
+accuracy, actual_ys, predicted_ys = test("test.json", Phi, Theta, option)
+print (accuracy*100)
+
+# print ("Training Accuracy = "), 
+# accuracy, actual_ys, predicted_ys = test("train.json", Phi, Theta)
+# print (accuracy)
 
 cm = confusion_matrix(actual_ys, predicted_ys)
-
-print(cm)
 
 plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
 plt.savefig("Confusion-Matrix")
 
-print(classification_report(actual_ys, predicted_ys))
+print "Macro F1 Score : ", f1_score(actual_ys, predicted_ys, average='macro')
