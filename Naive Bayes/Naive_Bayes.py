@@ -18,10 +18,10 @@ from sklearn import svm, datasets
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, classification_report
 
 # Hyper parameters
-tokenize_type = 2
+tokenize_type = 1
 
 # Global constants
 categories = 5
@@ -63,20 +63,28 @@ def tokenize(str):
         if "bad" in a or "worst" in a or "dissapoint" in a or "poor" in a:
             a.append("asdfghjkl")
         return a
+    elif tokenize_type == 7: # 2 and bigrams and hash
+        a = getStemmedDocuments(str)
+        a.extend(bigrams(a))
+        if u'amaz' in a or 'good' in a or u"excel" in a or "best" in a or u'love' in a:
+            a.append("qwertyuiop")
+        if "bad" in a or "worst" in a or "dissapoint" in a or "poor" in a:
+            a.append("asdfghjkl")
+        return a
 
-def generate_vocab():
+def generate_vocab(filename):
     seen = set()
     output = []
     inputs = []
-    counter = 0; limit = 10000
-    for value in json_reader("train.json"):
+    counter = 0
+    for value in json_reader(filename):
         inputs.append(value)
         for word in tokenize(value["text"]):
             if word not in seen:
                 output.append(word)
                 seen.add(word)
         counter+= 1
-        # if counter == limit: break
+        # if counter == 10000: break
     return (dict(zip(output, np.arange(0, len(output), 1))), inputs)
 
 def train(vocab, inputs):
@@ -126,7 +134,6 @@ def test(filename, Phi, Theta, option=1):
     correct = 0
     count = 0
     actual_ys = []; predicted_ys = []
-    if tokenize_type == 3: correct += 500
     for view in json_reader(filename):
         count += 1
         actual_y = int(view["stars"])
@@ -134,7 +141,7 @@ def test(filename, Phi, Theta, option=1):
         actual_ys.append(actual_y); predicted_ys.append(predicted_y)
         if(actual_y == predicted_y):
             correct += 1
-        # if count > 10000: break
+        # if count > 1000: break
     return float(correct)/float(count), actual_ys, predicted_ys
 
 def plot_confusion_matrix(cm, classes):
@@ -154,7 +161,7 @@ def plot_confusion_matrix(cm, classes):
     return ax
 
 
-vocab, inputs = generate_vocab()
+vocab, inputs = generate_vocab("train.json")
 
 dicts = len(vocab)
 
@@ -162,17 +169,18 @@ Phi, Theta, Denom = train(vocab, inputs)
 
 option = 1 # 1 = trained model, 2 = random, 3 = majority
 
-print ("Test Accuracy = "), 
-accuracy, actual_ys, predicted_ys = test("test.json", Phi, Theta, option)
-print (accuracy*100)
-
 # print ("Training Accuracy = "), 
 # accuracy, actual_ys, predicted_ys = test("train.json", Phi, Theta)
 # print (accuracy)
+
+print ("Test Accuracy = "), 
+accuracy, actual_ys, predicted_ys = test("test.json", Phi, Theta, option)
+print (accuracy*100)
 
 cm = confusion_matrix(actual_ys, predicted_ys)
 
 plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
 plt.savefig("Confusion-Matrix")
 
+print classification_report(actual_ys, predicted_ys)
 print "Macro F1 Score : ", f1_score(actual_ys, predicted_ys, average='macro')

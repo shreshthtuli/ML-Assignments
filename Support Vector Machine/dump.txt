@@ -28,10 +28,10 @@ Accuracy (Gaussian Kernel) =  99.8108747045
 ---Multiclass Classification---
 
 ConvOpt results:
-Multiclass Training Accuracy (Linear Kernel) =  92.89
-Multiclass Test Accuracy (Linear Kernel) =  88.85
-Multiclass Training Accuracy (Gaussian Kernel) =  65.195
-Multiclass Test Accuracy (Gaussian Kernel) =  66.29
+Multiclass Training Accuracy (Linear Kernel) =  96.89
+Multiclass Test Accuracy (Linear Kernel) =  90.85
+Multiclass Training Accuracy (Gaussian Kernel) =  97.195
+Multiclass Test Accuracy (Gaussian Kernel) =  96.29
 
 LibSVM results:
 Multiclass Training Accuracy (Linear Kernel) =  98.705

@@ -18,6 +18,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import classification_report
+import time
 
 def plot_confusion_matrix(cm, classes):
     fig, ax = plt.subplots()
@@ -126,8 +127,8 @@ def test(w, b, d, e, filename, alpha, X, Y, kernel_type):
         clsfy = e if val >= 0 else d
         if clsfy == Y1.item(i):
             correct += 1
-        # else:
-        #     savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
+        else:
+            savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total)
@@ -238,18 +239,24 @@ print '\033[94m'+"ConvOpt results:"+'\033[0m'
 Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
 # Linear SVM Model
+start = time.time()
 w, b, a, n = train(Xd, Yd, "linear", 1, 0)
+end = time.time() - start
 print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "linear")*100
 # print "Weight ", w
 print "Bias ", b
 print "nSV ", n
+print "Time ", end
 
 # Gaussian SVM Model
+start = time.time()
 w, b, a, n = train(Xd, Yd, "gaussian", 1, 0.05)
+end = time.time() - start
 print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "gaussian")*100
 # print "Weight ", w
 print "Bias ", b
 print "nSV ", n
+print "Time ", end
 
 
 ########## BINARY LIBSVM ##########
@@ -264,15 +271,21 @@ X1, Y1 = convertLinear(Xt, Yt, d, (d+1)%10, True)
 test_data, test_labels = listify(X1, Y1)
 
 # Linear SVM Model
+start = time.time()
 model = svm_train(train_labels, train_data,'-t 0 -c 1')
+end = time.time() - start
 [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
 print "Accuracy (Linear Kernel) = ", accuracy[0]
+print "Time ", end
 # print "Weight ", w
 
 # Gaussian SVM Model
+start = time.time()
 model = svm_train(train_labels, train_data,'-g 0.05 -c 1')
+end = time.time() - start
 [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
 print "Accuracy (Gaussian Kernel) = ", accuracy[0]
+print "Time ", end
 
 ########## MULTICLASS CONVOPT ##########
 
@@ -286,18 +299,24 @@ print
 print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
 # Linear SVM Model
+start = time.time()
 w, b = train_multiclass_cvx(X, Y, 'linear')
+end = time.time() - start
 acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
 acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
 print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
 print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
+print "Time ", end
 
 # Gaussian SVM Model
+start = time.time()
 w, b = train_multiclass_cvx(X, Y, 'gaussian')
+end = time.time() - start
 acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
 acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
 print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
 print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
+print "Time ", end
 
 
 ########## MULTICLASS LIBSVM ##########
@@ -305,18 +324,24 @@ print
 print '\033[94m'+"LibSVM results:"+'\033[0m'
 
 # Linear SVM Model
+start = time.time()
 models = train_multiclass(X, Y, '-t 0 -c 1 -q')
+end = time.time() - start
 acc, pred, actual = test_multiclass(models, X, Y)
 acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
 print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
 print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
+print "Time ", end
 
 # Gaussian SVM Model
+start = time.time()
 models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
+end = time.time() - start
 acc, pred, actual = test_multiclass(models, X, Y)
 acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
 print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
 print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
+print "Time ", end
 
 ########## CONFUSION MATRIX ##########
 
