@@ -5,6 +5,6 @@ then
     exit
 elif [ $1 = 2 ]
 then
-    python ./Support_Vector_Machine.py $2 $3 $4
+    python ./Support_Vector_Machine.py $2 $3 $4 $5
     exit
 fi

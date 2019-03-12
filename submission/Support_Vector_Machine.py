@@ -128,8 +128,8 @@ def test(w, b, d, e, filename, alpha, X, Y, kernel_type):
         clsfy = e if val >= 0 else d
         if clsfy == Y1.item(i):
             correct += 1
-        else:
-            savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
+        # else:
+        #     savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total)
@@ -221,155 +221,148 @@ def test_multiclass(models, X1, Y1):
 
 trainfile = argv[1]
 testfile = argv[2]
+d = 0
 
 # Read data from file
 X, Y = parseData(trainfile)
 print("Data parse complete...")
 
 bin_or_mult = int(argv[3])
+part = argv[4]
 
-d = 0
+if bin_or_mult == 0 and part == 'a':
+    print "D = ", d
 
-print "D = ", d
+    print '\033[95m'+"---Binary Classification---"+'\033[0m'
 
-print '\033[95m'+"---Binary Classification---"+'\033[0m'
+    ########## BINARY CONVOPT ##########
 
-########## BINARY CONVOPT ##########
+    print
+    print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
-print
-print '\033[94m'+"ConvOpt results:"+'\033[0m'
+    Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
-Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
+    # Linear SVM Model
+    start = time.time()
+    w, b, a, n = train(Xd, Yd, "linear", 1, 0)
+    end = time.time() - start
+    print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "linear")*100
+    # print "Weight ", w
+    print "Bias ", b
+    print "nSV ", n
+    print "Time ", end
+elif bin_or_mult == 0 and part == 'b':
+    print '\033[95m'+"---Binary Classification---"+'\033[0m'
+    print
+    print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
-# Linear SVM Model
-start = time.time()
-w, b, a, n = train(Xd, Yd, "linear", 1, 0)
-end = time.time() - start
-print "Accuracy (Linear Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "linear")*100
-# print "Weight ", w
-print "Bias ", b
-print "nSV ", n
-print "Time ", end
+    Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
+    # Gaussian SVM Model
+    start = time.time()
+    w, b, a, n = train(Xd, Yd, "gaussian", 1, 0.05)
+    end = time.time() - start
+    print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "gaussian")*100
+    # print "Weight ", w
+    print "Bias ", b
+    print "nSV ", n
+    print "Time ", end
+elif bin_or_mult == 0 and part == 'c':
 
-# Gaussian SVM Model
-start = time.time()
-w, b, a, n = train(Xd, Yd, "gaussian", 1, 0.05)
-end = time.time() - start
-print "Accuracy (Gaussian Kernel) = ", test(w, b, d, (d+1)%10, testfile, a, Xd, Yd, "gaussian")*100
-# print "Weight ", w
-print "Bias ", b
-print "nSV ", n
-print "Time ", end
+    ########## BINARY LIBSVM ##########
 
+    print '\033[95m'+"---Binary Classification---"+'\033[0m'
 
-########## BINARY LIBSVM ##########
+    print
+    print '\033[94m'+"LibSVM results:"+'\033[0m'
 
-print
-print '\033[94m'+"LibSVM results:"+'\033[0m'
+    Xd, Yd = convertLinear(X, Y, d, (d+1)%10)
 
-train_data, train_labels = listify(Xd, Yd)
+    train_data, train_labels = listify(Xd, Yd)
 
-Xt, Yt = parseData(testfile)
-X1, Y1 = convertLinear(Xt, Yt, d, (d+1)%10, True)
-test_data, test_labels = listify(X1, Y1)
+    Xt, Yt = parseData(testfile)
+    X1, Y1 = convertLinear(Xt, Yt, d, (d+1)%10, True)
+    test_data, test_labels = listify(X1, Y1)
 
-# Linear SVM Model
-start = time.time()
-model = svm_train(train_labels, train_data,'-t 0 -c 1')
-end = time.time() - start
-[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
-print "Accuracy (Linear Kernel) = ", accuracy[0]
-print "Time ", end
-# print "Weight ", w
+    # Linear SVM Model
+    start = time.time()
+    model = svm_train(train_labels, train_data,'-t 0 -c 1')
+    end = time.time() - start
+    [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
+    print "Accuracy (Linear Kernel) = ", accuracy[0]
+    print "Time ", end
+    # print "Weight ", w
 
-# Gaussian SVM Model
-start = time.time()
-model = svm_train(train_labels, train_data,'-g 0.05 -c 1')
-end = time.time() - start
-[predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
-print "Accuracy (Gaussian Kernel) = ", accuracy[0]
-print "Time ", end
+    # Gaussian SVM Model
+    start = time.time()
+    model = svm_train(train_labels, train_data,'-g 0.05 -c 1')
+    end = time.time() - start
+    [predicted_label, accuracy, decision_values] = svm_predict(test_labels, test_data, model, "-q")
+    print "Accuracy (Gaussian Kernel) = ", accuracy[0]
+    print "Time ", end
+elif bin_or_mult == 1 and part == 'a':
+    ########## MULTICLASS CONVOPT ##########
 
-########## MULTICLASS CONVOPT ##########
+    print '\033[95m'+"---Multiclass Classification---"+'\033[0m'
 
-print '\033[95m'+"---Multiclass Classification---"+'\033[0m'
+    # Test data
+    Xtest, Ytest = parseData(testfile)
+    # Training accuracy
 
-# Test data
-Xtest, Ytest = parseData(testfile)
-# Training accuracy
+    print
+    print '\033[94m'+"ConvOpt results:"+'\033[0m'
 
-print
-print '\033[94m'+"ConvOpt results:"+'\033[0m'
+    # Gaussian SVM Model
+    start = time.time()
+    w, b = train_multiclass_cvx(X, Y, 'gaussian')
+    end = time.time() - start
+    acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
+    acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
+    print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
+    print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
+    print "Time ", end
+elif bin_or_mult == 1 and (part == 'b' or part == 'c'):
+    Xtest, Ytest = parseData(testfile)
 
-# Linear SVM Model
-start = time.time()
-w, b = train_multiclass_cvx(X, Y, 'linear')
-end = time.time() - start
-acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
-acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
-print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
-print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
-print "Time ", end
+    ########## MULTICLASS LIBSVM ##########
+    print '\033[95m'+"---Multiclass Classification---"+'\033[0m'
+    print
+    print '\033[94m'+"LibSVM results:"+'\033[0m'
 
-# Gaussian SVM Model
-start = time.time()
-w, b = train_multiclass_cvx(X, Y, 'gaussian')
-end = time.time() - start
-acc, pred, actual = test_multiclass_cvx(w, b, X, Y)
-acc1, pred1, actual1 = test_multiclass_cvx(w, b, Xtest, Ytest)
-print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
-print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
-print "Time ", end
+    # Gaussian SVM Model
+    start = time.time()
+    models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
+    end = time.time() - start
+    acc, pred, actual = test_multiclass(models, X, Y)
+    acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
+    print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
+    print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
+    print "Time ", end
 
+    ########## CONFUSION MATRIX ##########
 
-########## MULTICLASS LIBSVM ##########
-print
-print '\033[94m'+"LibSVM results:"+'\033[0m'
+    cm = confusion_matrix(actual1, pred1)
 
-# Linear SVM Model
-start = time.time()
-models = train_multiclass(X, Y, '-t 0 -c 1 -q')
-end = time.time() - start
-acc, pred, actual = test_multiclass(models, X, Y)
-acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
-print "Multiclass Training Accuracy (Linear Kernel) = ", acc*100
-print "Multiclass Test Accuracy (Linear Kernel) = ", acc1*100
-print "Time ", end
+    if bin_or_mult == 1 and part == 'c':
+        print '\033[94m'+"Confusion Matrix:"+'\033[0m'
+        print(cm)
 
-# Gaussian SVM Model
-start = time.time()
-models = train_multiclass(X, Y, '-g 0.05 -c 1 -q')
-end = time.time() - start
-acc, pred, actual = test_multiclass(models, X, Y)
-acc1, pred1, actual1 = test_multiclass(models, Xtest, Ytest)
-print "Multiclass Training Accuracy (Gaussian Kernel) = ", acc*100
-print "Multiclass Test Accuracy (Gaussian Kernel) = ", acc1*100
-print "Time ", end
+    plot_confusion_matrix(cm, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    # plt.savefig("Confusion-Matrix")
+elif bin_or_mult == 1 and part == 'd':
+    ########## VALIDATION ##########
+    print '\033[95m'+"---Validation---"+'\033[0m'
+    Xtest, Ytest = parseData(testfile)
+    Xv = X[0:X.shape[0]/10:1]
+    Yv = Y[0:Y.shape[0]/10:1]
 
-########## CONFUSION MATRIX ##########
+    Xtrain = X[X.shape[0]/10::1]
+    Ytrain = Y[Y.shape[0]/10::1]
 
-cm = confusion_matrix(actual1, pred1)
+    print '\033[94m'+"Validation:"+'\033[0m'
 
-print '\033[94m'+"Confusion Matrix:"+'\033[0m'
-print(cm)
-
-plot_confusion_matrix(cm, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-plt.savefig("Confusion-Matrix")
-
-
-########## VALIDATION ##########
-
-Xv = X[0:X.shape[0]/10:1]
-Yv = Y[0:Y.shape[0]/10:1]
-
-Xtrain = X[X.shape[0]/10::1]
-Ytrain = Y[Y.shape[0]/10::1]
-
-print '\033[94m'+"Validation:"+'\033[0m'
-
-for i in [0.00001, 0.001, 1, 5, 10]:
-    models = train_multiclass(Xtrain, Ytrain, '-g 0.05 -c '+str(i)+' -q')
-    acc, pred, actual = test_multiclass(models, Xv, Yv)
-    print "Validation Accuracy with C = ", i, " is : ", acc*100
-    acc, pred, actual = test_multiclass(models, Xtest, Ytest)
-    print "Test Accuracy with C = ", i, " is : ", acc*100
+    for i in [0.00001, 0.001, 1, 5, 10]:
+        models = train_multiclass(Xtrain, Ytrain, '-g 0.05 -c '+str(i)+' -q')
+        acc, pred, actual = test_multiclass(models, Xv, Yv)
+        print "Validation Accuracy with C = ", i, " is : ", acc*100
+        acc, pred, actual = test_multiclass(models, Xtest, Ytest)
+        print "Test Accuracy with C = ", i, " is : ", acc*100

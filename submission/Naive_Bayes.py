@@ -85,7 +85,7 @@ def generate_vocab(filename):
                 output.append(word)
                 seen.add(word)
         counter+= 1
-        # if counter == 10000: break
+        # if counter == 1000: break
     return (dict(zip(output, np.arange(0, len(output), 1))), inputs)
 
 def train(vocab, inputs):
@@ -142,7 +142,7 @@ def test(filename, Phi, Theta, option=1):
         actual_ys.append(actual_y); predicted_ys.append(predicted_y)
         if(actual_y == predicted_y):
             correct += 1
-        # if count > 1000: break
+        # if count > 100: break
     return float(correct)/float(count), actual_ys, predicted_ys
 
 def plot_confusion_matrix(cm, classes):
@@ -161,6 +161,27 @@ def plot_confusion_matrix(cm, classes):
     fig.tight_layout()
     return ax
 
+def run(part, option):
+    if part == 'a':
+        print ("Training Accuracy = "), 
+        accuracy, actual_ys, predicted_ys = test("train.json", Phi, Theta)
+        print (accuracy)
+
+    print ("Test Accuracy = "), 
+    accuracy, actual_ys, predicted_ys = test(argv[2], Phi, Theta, option)
+    print (accuracy*100)
+
+    cm = confusion_matrix(actual_ys, predicted_ys)
+    if part == 'c':
+        print cm
+
+    plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
+    plt.savefig("Confusion-Matrix")
+
+    # print classification_report(actual_ys, predicted_ys)
+    if part != 'a':
+        print "Macro F1 Score : ", f1_score(actual_ys, predicted_ys, average='macro')
+
 
 vocab, inputs = generate_vocab(argv[1])
 
@@ -168,20 +189,24 @@ dicts = len(vocab)
 
 Phi, Theta, Denom = train(vocab, inputs)
 
+part = argv[3]
 option = 1 # 1 = trained model, 2 = random, 3 = majority
 
-# print ("Training Accuracy = "), 
-# accuracy, actual_ys, predicted_ys = test("train.json", Phi, Theta)
-# print (accuracy)
-
-print ("Test Accuracy = "), 
-accuracy, actual_ys, predicted_ys = test(argv[2], Phi, Theta, option)
-print (accuracy*100)
-
-cm = confusion_matrix(actual_ys, predicted_ys)
-
-plot_confusion_matrix(cm, [1, 2, 3, 4, 5])
-plt.savefig("Confusion-Matrix")
-
-print classification_report(actual_ys, predicted_ys)
-print "Macro F1 Score : ", f1_score(actual_ys, predicted_ys, average='macro')
+if part == 'a':
+    run(part, 1)
+elif part == 'b':
+    print "Random prediction"
+    run(part, 2)
+    print "Majority prediction"
+    run(part, 3)
+elif part == 'c':
+    run(part, 1)
+elif part == 'd':
+    tokenize_type = 2
+    run(part, 1)
+elif part == 'e':
+    tokenize_type = 7
+    run(part, 1)
+elif part == 'g':
+    tokenize_type = 2
+    run(part, 1)
