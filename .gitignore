@@ -8,7 +8,6 @@ __pycache__/
 
 # test JSON files
 *.json
-*.png
 
 # Distribution / packaging
 .Python
