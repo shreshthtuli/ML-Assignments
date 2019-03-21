@@ -66,6 +66,7 @@ def tokenize(str):
         return a
     elif tokenize_type == 7: # 2 and bigrams and hash
         a = getStemmedDocuments(str)
+        # a = str.strip().split()
         a.extend(bigrams(a))
         if u'amaz' in a or 'good' in a or u"excel" in a or "best" in a or u'love' in a:
             a.append("qwertyuiop")

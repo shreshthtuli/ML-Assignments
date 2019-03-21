@@ -124,7 +124,7 @@ def test(w, b, d, e, filename, alpha, X, Y, kernel_type):
     total = 0
     Ya = np.multiply(Y, alpha.value).T if kernel_type != "linear" else []
     for i in xrange(Y1.shape[0]):
-        val = float(w*(X1[i].reshape(1, X.shape[1]).T)) + b# if kernel_type == "linear" else gaussian_weight(X, Ya, X1[i]) + b
+        val = float(w*(X1[i].reshape(1, X.shape[1]).T)) + b if kernel_type == "linear" else gaussian_weight(X, Ya, X1[i]) + b
         clsfy = e if val >= 0 else d
         if clsfy == Y1.item(i):
             correct += 1

@@ -128,8 +128,8 @@ def test(w, b, d, e, filename, alpha, X, Y, kernel_type):
         clsfy = e if val >= 0 else d
         if clsfy == Y1.item(i):
             correct += 1
-        # else:
-        #     savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
+        else:
+            savefig(X1[i].reshape(1, X.shape[1]), "./wrong/wrong"+str(total)+"a"+str(int(Y1.item(i)))+"p"+str(int(clsfy))+".png")
         total += 1
     
     return float(correct) / float(total)
@@ -347,7 +347,7 @@ elif bin_or_mult == 1 and (part == 'b' or part == 'c'):
         print(cm)
 
     plot_confusion_matrix(cm, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-    # plt.savefig("Confusion-Matrix")
+    plt.savefig("Confusion-Matrix")
 elif bin_or_mult == 1 and part == 'd':
     ########## VALIDATION ##########
     print '\033[95m'+"---Validation---"+'\033[0m'
