@@ -164,7 +164,7 @@ def plot_confusion_matrix(cm, classes):
 def run(part, option):
     if part == 'a':
         print ("Training Accuracy = "), 
-        accuracy, actual_ys, predicted_ys = test("train.json", Phi, Theta)
+        accuracy, actual_ys, predicted_ys = test(argv[1], Phi, Theta)
         print (accuracy)
 
     print ("Test Accuracy = "), 
