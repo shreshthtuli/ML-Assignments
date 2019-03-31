@@ -10,6 +10,21 @@ Machine Learning Model : Decision Trees
 import numpy as np
 np.set_printoptions(threshold=np.inf)
 
+def parseData(filename):
+    file = open(filename, "r")
+    lines = file.readlines()
+    read = np.matrix([map(int, line.strip().split(',')) for line in lines[2:]])
+    X = read[:,1:]
+    return X
+
+def preProcessData(X):
+    for i in [0, 4] + range(11, 23):
+        median = np.median(X[:,i], axis=0)
+        for j in range(X.shape[0]):
+            X[j,i] = 1 if X[j,i] >= median else 0 # Continuous to binary
+    for j in range(X.shape[0]):
+        X[j,1] = X[j,1] - 1 # Binary 1,2 to 0,1
+
 def log2(val):
     return 0 if val == 0 else np.log2(val)
 
@@ -35,15 +50,16 @@ def values(attribute):
     elif attribute in range(5, 11): # Repayment status
         values = range(-2, 10)
     else: # Binary or conitunuous
-        values = range(1)
+        values = range(2)
     return values
 
 def extract(D, attr, val):
     dret = []
-    for d in D:
-        if d[attr] == val:
-            dret.append(d)
-    return dret
+    D1 = D.tolist()
+    for i in range(D.shape[0]):
+        if D[i,attr] == val:
+            dret.append(D1[i])
+    return np.matrix(dret) 
 
 class Node:
     def __init__(self, parent, Dat):
@@ -66,8 +82,9 @@ class Node:
         return self.entropy - childEntropy
 
     def predict(self):
-        self.ones = np.count_nonzero(self.data[:,-1]) + 0.0
-        self.zeros = self.data.shape[0] - self.ones
+        try: self.ones = np.count_nonzero(self.data[:,-1]) + 0.0 
+        except: pass
+        self.zeros = self.data.shape[0] - self.ones if self.data.shape[1] > 0 else 0
         self.prediction = 1 if self.ones > self.zeros else 0
 
     def split(self):
@@ -76,37 +93,24 @@ class Node:
     
     def findAttribute(self):
         self.predict()
-        print self.ones, self.zeros, self.data.shape[0]
         self.entropy = - (self.ones/self.data.shape[0])*log2(self.ones/self.data.shape[0]) \
                   - (self.zeros/self.data.shape[0])*log2(self.zeros/self.data.shape[0])
-        print np.array([self.information(a) for a in range(23)])
+        print self.entropy, np.array([self.information(a) for a in range(23)])
         self.attr = np.array([self.information(a) for a in range(23)]).argmax()
         if not self.isLeaf:
             self.split()
         
 
-def parseData(filename):
-    file = open(filename, "r")
-    lines = file.readlines()
-    read = np.matrix([map(int, line.strip().split(',')) for line in lines[2:]])
-    X = read[:,1:]
-    return X
-
-def preProcessData(X):
-    for i in [0, 4] + range(11, 23):
-        median = np.median(X[:,i], axis=0)
-        for j in range(X.shape[0]):
-            X[j,i] = 1 if X[j,i] >= median else 0 # Continuous to binary
-    for j in range(X.shape[0]):
-        X[j,1] = X[j,1] - 1 # Binary 1,2 to 0,1
-    
-
-Data = parseData('credit-cards.val.csv')
+Data = parseData('credit-cards.train.csv')
 preProcessData(Data)
 
 Tree = Node(None, Data)
 Tree.predict()
 print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0]
-Tree.isLeaf = True
+Tree.isLeaf = False
 Tree.findAttribute()
 print Tree.attr
+
+for i in Tree.children:
+    i.predict()
+    print i.zeros, i.ones
