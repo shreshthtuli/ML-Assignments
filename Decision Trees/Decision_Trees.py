@@ -10,6 +10,9 @@ Machine Learning Model : Decision Trees
 import numpy as np
 np.set_printoptions(threshold=np.inf)
 
+MAX_NODES = 100
+NODES = 0
+
 def parseData(filename):
     file = open(filename, "r")
     lines = file.readlines()
@@ -64,6 +67,7 @@ def extract(D, attr, val):
 
 class Node:
     def __init__(self, parent, Dat):
+        global NODES
         self.parent = parent
         self.data = Dat
         self.attr = None
@@ -72,7 +76,8 @@ class Node:
         self.ones = 0
         self.entropy = 0
         self.prediction = None
-        self.isLeaf = False
+        NODES += 1
+        self.isLeaf = True if NODES > MAX_NODES else False
         self.findAttribute()
     
     def information(self, attribute):
