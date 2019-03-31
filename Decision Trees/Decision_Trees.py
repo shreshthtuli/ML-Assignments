@@ -31,6 +31,7 @@ def log2(val):
 def getEntropy(D, attr, val):
     prob = 0.0
     ones = 0.0; zeros = 0.0
+    if D.shape[1] == 0: return 0, 0
     for i in range(D.shape[0]):
         if D[i,attr] == val:
             prob += 1
@@ -72,6 +73,7 @@ class Node:
         self.entropy = 0
         self.prediction = None
         self.isLeaf = False
+        self.findAttribute()
     
     def information(self, attribute):
         childEntropy = 0
@@ -88,6 +90,7 @@ class Node:
         self.prediction = 1 if self.ones > self.zeros else 0
 
     def split(self):
+        print "Splitting on attribute", self.attr, "into", len(values(self.attr)), "children"
         for value in values(self.attr):
             self.children.append(Node(self, extract(self.data, self.attr, value)))
     
@@ -95,22 +98,38 @@ class Node:
         self.predict()
         self.entropy = - (self.ones/self.data.shape[0])*log2(self.ones/self.data.shape[0]) \
                   - (self.zeros/self.data.shape[0])*log2(self.zeros/self.data.shape[0])
-        print self.entropy, np.array([self.information(a) for a in range(23)])
-        self.attr = np.array([self.information(a) for a in range(23)]).argmax()
+        informationArray = np.array([self.information(a) for a in range(23)])
+        # print self.entropy, np.max(informationArray), self.zeros, self.ones
+        if np.max(informationArray) > 0:
+            self.attr = informationArray.argmax()
+        else:
+            self.isLeaf = True; # print "Leaf"
         if not self.isLeaf:
             self.split()
+        
+    def test(self, dat):
+        if self.isLeaf or (self.children[dat[self.attr]].zeros == 0 and self.children[dat[self.attr]].ones == 0):
+            return self.prediction
+        else:
+            return self.children[dat[self.attr]].test(dat)
+
+
+def Test(tree, filename):
+    TestData = parseData(filename)
+    preProcessData(TestData)
+    TestData = TestData.tolist()
+    correct = 0; 
+    for i in range(len(TestData)):
+        pred = tree.test(TestData[i])
+        actual = TestData[i][-1]
+        correct = correct + 1 if pred == actual else correct
+    print correct, len(TestData)
         
 
 Data = parseData('credit-cards.train.csv')
 preProcessData(Data)
 
 Tree = Node(None, Data)
-Tree.predict()
-print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0]
-Tree.isLeaf = False
-Tree.findAttribute()
-print Tree.attr
+print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
 
-for i in Tree.children:
-    i.predict()
-    print i.zeros, i.ones
+Test(Tree, "credit-cards.test.csv")
