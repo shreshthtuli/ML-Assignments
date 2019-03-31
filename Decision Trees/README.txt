@@ -49,3 +49,16 @@ X18-X23: (continuous) Amount of previous payment
 	.
 	.
 	X23 = amount paid in April, 2005. 
+
+##############################################################################
+
+Implementation points:
+
+1. Decision tree node class:
+	- Feature on which split
+	- Data list
+	- Children list
+	- Parent pointer
+	- Majority prediction
+	- isLeaf
+	- Entropy function
