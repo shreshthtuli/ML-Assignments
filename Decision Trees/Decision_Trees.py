@@ -13,6 +13,8 @@ np.set_printoptions(threshold=np.inf)
 MAX_NODES = 100000
 NODES = 0
 
+CALC_LOCAL_MEDIAN = False
+
 TreeNodes = []
 
 def parseData(filename):
@@ -75,6 +77,8 @@ class Node:
         global NODES
         self.parent = parent
         self.data = Dat
+        if CALC_LOCAL_MEDIAN:
+            preProcessData(self.data)
         self.attr = None
         self.children = []
         self.pruned = False
@@ -103,15 +107,12 @@ class Node:
                   - plogp(self.zeros, self.data.shape[0])
 
     def split(self):
-        print "Splitting on attribute", self.attr, "into", len(values(self.attr)), "children"
         for value in values(self.attr):
             self.children.append(Node(self, extract(self.data, self.attr, value)))
     
     def findAttribute(self):
         self.predict()     
         informationArray = np.array([self.information(a) for a in range(23)])
-        # print informationArray, informationArray.argmax()
-        # exit(0)
         if np.max(informationArray) > 0.001 and NODES < MAX_NODES:
             self.attr = informationArray.argmax()
         else:
@@ -137,16 +138,78 @@ def Test(tree, filename):
         pred = tree.test(TestData[i])
         actual = TestData[i][-1]
         correct = correct + 1 if pred == actual else correct
-    print "Accuracy = ", 100*correct/(len(TestData)+0.0)
-    print "Nodes = ", NODES
+    return 100*correct/(len(TestData)+0.0)
+
+def Validate(tree, TestData):
+    correct = 0; 
+    for i in range(len(TestData)):
+        pred = tree.test(TestData[i])
+        actual = TestData[i][-1]
+        correct = correct + 1 if pred == actual else correct
+    return 100*correct/(len(TestData)+0.0)
         
+print '\033[95m'+"Parsing and preprocessing training data"+'\033[0m'
 
 Data = parseData('credit-cards.train.csv')
 preProcessData(Data)
 
+print '\033[95m'+"Training Decision tree"+'\033[0m'
+
 Tree = Node(None, Data)
 print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
 
-Test(Tree, "credit-cards.train.csv")
-Test(Tree, "credit-cards.val.csv")
-Test(Tree, "credit-cards.test.csv")
+print "Nodes = ", NODES
+print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+
+
+## Pruning nodes based on validation
+
+print '\033[95m'+"Pruning nodes based on validation accuracy"+'\033[0m'
+
+val = Test(Tree, "credit-cards.val.csv")
+newval = val
+
+PrunedArray = np.zeros(len(TreeNodes))
+TempArray = np.zeros(len(TreeNodes))
+
+TestData = parseData("credit-cards.val.csv")
+preProcessData(TestData)
+TestData = TestData.tolist()
+
+while True:
+    for i in range(1, len(TreeNodes)):
+        if PrunedArray[i] == 1:
+            continue
+        TreeNodes[i].pruned = True
+        TempArray[i] = Validate(Tree, TestData)
+        TreeNodes[i].pruned = False
+    bestPrune = TempArray.argmax()
+    TreeNodes[bestPrune].pruned = True
+    val = newval
+    newval = Validate(Tree, TestData)
+    print "New validation accuracy =", newval, "by pruning node", bestPrune
+    if newval < val:
+        TreeNodes[bestPrune].pruned = False; break
+    PrunedArray[bestPrune] = 1
+
+print "Number of Nodes pruned =", np.count_nonzero(PrunedArray)
+print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+
+
+## Local median calculation
+
+CALC_LOCAL_MEDIAN = True
+
+print '\033[95m'+"Local Data parsing tree"+'\033[0m'
+
+Tree = Node(None, Data)
+print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
+
+print "Nodes = ", NODES
+print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
