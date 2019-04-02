@@ -77,7 +77,7 @@ class Node:
         global NODES
         self.parent = parent
         self.data = Dat
-        if CALC_LOCAL_MEDIAN:
+        if CALC_LOCAL_MEDIAN and self.data.shape[1] != 0:
             preProcessData(self.data)
         self.attr = None
         self.children = []
@@ -148,10 +148,14 @@ def Validate(tree, TestData):
         correct = correct + 1 if pred == actual else correct
     return 100*correct/(len(TestData)+0.0)
         
+## Parsing and preprocessing
+
 print '\033[95m'+"Parsing and preprocessing training data"+'\033[0m'
 
 Data = parseData('credit-cards.train.csv')
 preProcessData(Data)
+
+## Training
 
 print '\033[95m'+"Training Decision tree"+'\033[0m'
 
@@ -179,6 +183,7 @@ preProcessData(TestData)
 TestData = TestData.tolist()
 
 while True:
+    TempArray = np.zeros(len(TreeNodes))
     for i in range(1, len(TreeNodes)):
         if PrunedArray[i] == 1:
             continue
@@ -190,7 +195,7 @@ while True:
     val = newval
     newval = Validate(Tree, TestData)
     print "New validation accuracy =", newval, "by pruning node", bestPrune
-    if newval < val:
+    if newval <= val:
         TreeNodes[bestPrune].pruned = False; break
     PrunedArray[bestPrune] = 1
 
@@ -202,6 +207,7 @@ print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
 
 ## Local median calculation
 
+Data = parseData('credit-cards.train.csv')
 CALC_LOCAL_MEDIAN = True
 
 print '\033[95m'+"Local Data parsing tree"+'\033[0m'

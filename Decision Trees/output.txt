@@ -1,0 +1,34 @@
+Parsing and preprocessing training data
+Training Decision tree
+0 14057.0 3943.0 18000 5
+Nodes =  14542
+Train accuracy = 94.6444444444
+Validation accuracy = 74.5333333333
+Test accuracy = 74.8833333333
+Pruning nodes based on validation accuracy
+New validation accuracy = 77.2333333333 by pruning node 4379
+New validation accuracy = 78.6166666667 by pruning node 1189
+New validation accuracy = 79.1666666667 by pruning node 9586
+New validation accuracy = 79.6833333333 by pruning node 1
+New validation accuracy = 80.15 by pruning node 13488
+New validation accuracy = 80.3666666667 by pruning node 12527
+New validation accuracy = 80.4166666667 by pruning node 12418
+New validation accuracy = 80.4666666667 by pruning node 14322
+New validation accuracy = 80.5 by pruning node 12494
+New validation accuracy = 80.5333333333 by pruning node 14172
+New validation accuracy = 80.5666666667 by pruning node 14513
+New validation accuracy = 80.5833333333 by pruning node 12369
+New validation accuracy = 80.6 by pruning node 12413
+New validation accuracy = 80.6166666667 by pruning node 12504
+New validation accuracy = 80.6333333333 by pruning node 14071
+New validation accuracy = 80.65 by pruning node 14414
+New validation accuracy = 80.6666666667 by pruning node 14526
+New validation accuracy = 80.6833333333 by pruning node 14537
+New validation accuracy = 80.6833333333 by pruning node 2
+New validation accuracy = 80.6833333333 by pruning node 3
+Local Data parsing tree
+0 14057.0 3943.0 18000 5
+Nodes =  14603
+Train accuracy = 78.1111111111
+Validation accuracy = 76.9833333333
+Test accuracy = 78.1166666667
