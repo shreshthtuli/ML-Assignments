@@ -16,7 +16,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 
-np.set_printoptions(threshold=np.inf)
+# np.set_printoptions(threshold=np.inf)
 
 MAX_NODES = 100000
 NODES = 0
@@ -92,9 +92,9 @@ def getEntropy(D, attr, val):
               - plogp(zeros, zeros+ones)
     return prob, entropy
 
-def extract(D, attr, val):
+def extract(Dcopy, D, attr, val):
     dret = []
-    D1 = D.tolist()
+    D1 = Dcopy.tolist()
     for i in range(D.shape[0]):
         if D[i,attr] == val:
             dret.append(D1[i])
@@ -108,9 +108,11 @@ def maxAttr(b):
 
 class Node:
     def __init__(self, parent, Dat, attributes=Attributes):
+        global CALC_LOCAL_MEDIAN
         global NODES
         self.parent = parent
-        self.data = Dat
+        self.datacopy = Dat
+        self.data = np.copy(Dat)
         self.attributes = attributes
         if CALC_LOCAL_MEDIAN and self.data.shape[1] != 0:
             preProcessData(self.data)
@@ -142,9 +144,11 @@ class Node:
                   - plogp(self.zeros, self.data.shape[0])
 
     def split(self):
+        global CALC_LOCAL_MEDIAN
         self.attributes[self.attr] += 1
+        dataToSend = self.datacopy if CALC_LOCAL_MEDIAN else self.data
         for value in values(self.attr):
-            self.children.append(Node(self, extract(self.data, self.attr, value), self.attributes))
+            self.children.append(Node(self, extract(dataToSend, self.data, self.attr, value), self.attributes))
     
     def findAttribute(self):
         self.predict()     
@@ -284,7 +288,7 @@ if argv[1] == '1':
         val_acc.append(Test(Tree, argv[4]))
         test_acc.append(Test(Tree, argv[3]))
 
-    plotGraph('Traning accuracy with number of nodes', 'Training Accuracy %', nodes, train_acc)
+    plotGraph('Training accuracy with number of nodes', 'Training Accuracy %', nodes, train_acc)
     plotGraph('Validation accuracy with number of nodes', 'Validation Accuracy %', nodes, val_acc)
     plotGraph('Test accuracy with number of nodes', 'Test Accuracy %', nodes, test_acc)
 
@@ -333,7 +337,7 @@ if argv[1] == '2':
     print "Validation accuracy =", Test(Tree, argv[4])
     print "Test accuracy =", Test(Tree, argv[3])
 
-    plotGraph('Traning accuracy with number of nodes', 'Pruning Training Accuracy %', nodes, train_acc)
+    plotGraph('Training accuracy with number of nodes', 'Pruning Training Accuracy %', nodes, train_acc)
     plotGraph('Validation accuracy with number of nodes', 'Pruning Validation Accuracy %', nodes, val_acc)
     plotGraph('Test accuracy with number of nodes', 'Pruning Test Accuracy %', nodes, test_acc)
 
@@ -359,6 +363,8 @@ if argv[1] == '3':
     print "Max number of times split by X1, X2, ... , X23:"
     print Max_attributes
 
+    nodes = []; train_acc = []; val_acc = []; test_acc = []
+
     for MAX_NODES in range(1000, 15000, 1000):
         NODES = 0
         Tree = Node(None, Data)
@@ -367,7 +373,7 @@ if argv[1] == '3':
         val_acc.append(Test(Tree, argv[4]))
         test_acc.append(Test(Tree, argv[3]))
 
-    plotGraph('Traning accuracy with number of nodes', 'Local Training Accuracy %', nodes, train_acc)
+    plotGraph('Training accuracy with number of nodes', 'Local Training Accuracy %', nodes, train_acc)
     plotGraph('Validation accuracy with number of nodes', 'Local Validation Accuracy %', nodes, val_acc)
     plotGraph('Test accuracy with number of nodes', 'Local Test Accuracy %', nodes, test_acc)
 

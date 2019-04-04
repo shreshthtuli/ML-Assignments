@@ -31,10 +31,35 @@ Validation accuracy = 80.6833333333
 Test accuracy = 80.6666666667
 Local Data parsing tree
 0 14057.0 3943.0 18000 5
-Nodes =  14603
-Train accuracy = 78.1111111111
-Validation accuracy = 76.9833333333
-Test accuracy = 78.1166666667
+Nodes =  13826
+Train accuracy = 74.45
+Validation accuracy = 66.3833333333
+Test accuracy = 66.85
+Attribute X1 split multiple times
+Attribute X2 split multiple times
+Attribute X3 split multiple times
+Attribute X4 split multiple times
+Attribute X5 split multiple times
+Attribute X6 split multiple times
+Attribute X7 split multiple times
+Attribute X8 split multiple times
+Attribute X9 split multiple times
+Attribute X10 split multiple times
+Attribute X11 split multiple times
+Attribute X12 split multiple times
+Attribute X13 split multiple times
+Attribute X14 split multiple times
+Attribute X15 split multiple times
+Attribute X16 split multiple times
+Attribute X17 split multiple times
+Attribute X18 split multiple times
+Attribute X19 split multiple times
+Attribute X20 split multiple times
+Attribute X21 split multiple times
+Attribute X22 split multiple times
+Attribute X23 split multiple times
+Max number of times split by X1, X2, ... , X23:
+[1156, 285, 175, 229, 680, 1, 53, 87, 66, 98, 98, 286, 110, 102, 109, 98, 84, 103, 101, 94, 83, 61, 72]
 Scikit-learn Decision Tree classifier
 Training 150 Decision Trees
 Trained 0
