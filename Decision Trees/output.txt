@@ -62,7 +62,6 @@ Validation accuracy = 79.2666666667
 Test accuracy = 79.3
 Scikit-learn Random Forest classifier
 Training 1200 Decision Trees
-(18000,)
 Trained 0
 Trained 120
 Trained 240

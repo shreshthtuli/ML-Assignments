@@ -7,11 +7,15 @@ Machine Learning Model : Decision Trees
 
 """
 
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np
 from sys import argv
 import itertools
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
+
 np.set_printoptions(threshold=np.inf)
 
 MAX_NODES = 100000
@@ -20,6 +24,9 @@ NODES = 0
 CALC_LOCAL_MEDIAN = False
 
 TreeNodes = []
+
+Attributes = [0]*23
+Max_attributes = [0]*23
 
 def values(attribute):
     values = []
@@ -93,11 +100,18 @@ def extract(D, attr, val):
             dret.append(D1[i])
     return np.matrix(dret) 
 
+def maxAttr(b):
+    global Max_attributes
+    for i in range(len(b)):
+        if b[i] > Max_attributes[i]:
+            Max_attributes[i] = b[i]
+
 class Node:
-    def __init__(self, parent, Dat):
+    def __init__(self, parent, Dat, attributes=Attributes):
         global NODES
         self.parent = parent
         self.data = Dat
+        self.attributes = attributes
         if CALC_LOCAL_MEDIAN and self.data.shape[1] != 0:
             preProcessData(self.data)
         self.attr = None
@@ -128,8 +142,9 @@ class Node:
                   - plogp(self.zeros, self.data.shape[0])
 
     def split(self):
+        self.attributes[self.attr] += 1
         for value in values(self.attr):
-            self.children.append(Node(self, extract(self.data, self.attr, value)))
+            self.children.append(Node(self, extract(self.data, self.attr, value), self.attributes))
     
     def findAttribute(self):
         self.predict()     
@@ -138,6 +153,7 @@ class Node:
             self.attr = informationArray.argmax()
         else:
             self.isLeaf = True;
+            maxAttr(self.attributes)
         if not self.isLeaf:
             self.split()
         
@@ -148,6 +164,14 @@ class Node:
             return self.parent.prediction
         else:
             return self.children[dat[self.attr]].test(dat)
+        
+    def numNodes(self):
+        if self.pruned or self.isLeaf:
+            return 1
+        n = 1
+        for child in self.children:
+            n += child.numNodes()
+        return n
 
 
 def Test(tree, filename):
@@ -187,14 +211,14 @@ def printBest(best, dtrees, train_acc, valid_acc, test_acc):
     print "Test accuracy =", test_acc[best]
 
 def validateParams(params, dtrees):
-    x_train, y_train = giveXY(preProcessData, 'credit-cards.train.csv')
-    x_valid, y_valid = giveXY(preProcessData, 'credit-cards.val.csv')
-    x_test, y_test = giveXY(preProcessData, 'credit-cards.test.csv')
+    x_train, y_train = giveXY(preProcessData, argv[2])
+    x_valid, y_valid = giveXY(preProcessData, argv[4])
+    x_test, y_test = giveXY(preProcessData, argv[3])
     train_acc = []; valid_acc = []; test_acc = []
 
     print "Training", len(dtrees), "Decision Trees"; i = 0
 
-    y_train = y_train.A1; print y_train.shape
+    y_train = y_train.A1
     for tree in dtrees:
         tree.fit(x_train,y_train)
         if float(i)/len(dtrees)*100 % 10 == 0:
@@ -218,12 +242,22 @@ def validateParams(params, dtrees):
     printBest(best, dtrees, train_acc, valid_acc, test_acc)
     return best
 
+
+def plotGraph(title, ylbl, x, y):
+    plt.xlabel('Number of Nodes')
+    plt.title(title)
+    plt.ylabel(ylbl)
+    plt.plot(x, y, '-ro')
+    plt.savefig(ylbl+'.png')
+    plt.show()
+    plt.clf()
+
         
 ## Parsing and preprocessing
 
 print '\033[95m'+"Parsing and preprocessing training data"+'\033[0m'
 
-Data = parseData('credit-cards.train.csv')
+Data = parseData(argv[2])
 preProcessData(Data)
 
 ## Training
@@ -236,10 +270,23 @@ if argv[1] == '1':
     print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
 
     print "Nodes = ", NODES
-    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    print "Train accuracy =", Test(Tree, argv[2])
+    print "Validation accuracy =", Test(Tree, argv[4])
+    print "Test accuracy =", Test(Tree, argv[3])
 
+    nodes = []; train_acc = []; val_acc = []; test_acc = []
+
+    for MAX_NODES in range(1000, 15000, 1000):
+        NODES = 0
+        Tree = Node(None, Data)
+        nodes.append(NODES)
+        train_acc.append(Test(Tree, argv[2]))
+        val_acc.append(Test(Tree, argv[4]))
+        test_acc.append(Test(Tree, argv[3]))
+
+    plotGraph('Traning accuracy with number of nodes', 'Training Accuracy %', nodes, train_acc)
+    plotGraph('Validation accuracy with number of nodes', 'Validation Accuracy %', nodes, val_acc)
+    plotGraph('Test accuracy with number of nodes', 'Test Accuracy %', nodes, test_acc)
 
 ## Pruning nodes based on validation
 
@@ -247,17 +294,23 @@ if argv[1] == '2':
 
     print '\033[95m'+"Pruning nodes based on validation accuracy"+'\033[0m'
 
-    val = Test(Tree, "credit-cards.val.csv")
+    Tree = Node(None, Data)
+
+    val = Test(Tree, argv[4])
     newval = val
 
     PrunedArray = np.zeros(len(TreeNodes))
     TempArray = np.zeros(len(TreeNodes))
 
-    TestData = parseData("credit-cards.val.csv")
+    TestData = parseData(argv[4])
     preProcessData(TestData)
     TestData = TestData.tolist()
 
+    nodes = []; train_acc = []; val_acc = []; test_acc = []
+
     while True:
+        nodes.append(Tree.numNodes()); train_acc.append(Test(Tree, argv[2]))
+        val_acc.append(Test(Tree, argv[4])); test_acc.append(Test(Tree, argv[3]))
         TempArray = np.zeros(len(TreeNodes))
         for i in range(1, len(TreeNodes)):
             if PrunedArray[i] == 1:
@@ -269,22 +322,26 @@ if argv[1] == '2':
         TreeNodes[bestPrune].pruned = True
         val = newval
         newval = Validate(Tree, TestData)
-        print "New validation accuracy =", newval, "by pruning node", bestPrune
+        print "New validation accuracy =", newval, "by pruning node", bestPrune, "num nodes =", Tree.numNodes()
         if newval <= val:
             TreeNodes[bestPrune].pruned = False; break
         PrunedArray[bestPrune] = 1
 
+    print "Final Results: "
     print "Number of Nodes pruned =", np.count_nonzero(PrunedArray)
-    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    print "Train accuracy =", Test(Tree, argv[2])
+    print "Validation accuracy =", Test(Tree, argv[4])
+    print "Test accuracy =", Test(Tree, argv[3])
 
+    plotGraph('Traning accuracy with number of nodes', 'Pruning Training Accuracy %', nodes, train_acc)
+    plotGraph('Validation accuracy with number of nodes', 'Pruning Validation Accuracy %', nodes, val_acc)
+    plotGraph('Test accuracy with number of nodes', 'Pruning Test Accuracy %', nodes, test_acc)
 
 ## Local median calculation
 
 if argv[1] == '3':
 
-    Data = parseData('credit-cards.train.csv')
+    Data = parseData(argv[2])
     CALC_LOCAL_MEDIAN = True
 
     print '\033[95m'+"Local Data parsing tree"+'\033[0m'
@@ -293,9 +350,26 @@ if argv[1] == '3':
     print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
 
     print "Nodes = ", NODES
-    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    print "Train accuracy =", Test(Tree, argv[2])
+    print "Validation accuracy =", Test(Tree, argv[4])
+    print "Test accuracy =", Test(Tree, argv[3])
+    for i in range(23):
+        if Max_attributes[i] > 0:
+            print "Attribute X"+str(i+1)+" split multiple times"
+    print "Max number of times split by X1, X2, ... , X23:"
+    print Max_attributes
+
+    for MAX_NODES in range(1000, 15000, 1000):
+        NODES = 0
+        Tree = Node(None, Data)
+        nodes.append(NODES)
+        train_acc.append(Test(Tree, argv[2]))
+        val_acc.append(Test(Tree, argv[4]))
+        test_acc.append(Test(Tree, argv[3]))
+
+    plotGraph('Traning accuracy with number of nodes', 'Local Training Accuracy %', nodes, train_acc)
+    plotGraph('Validation accuracy with number of nodes', 'Local Validation Accuracy %', nodes, val_acc)
+    plotGraph('Test accuracy with number of nodes', 'Local Test Accuracy %', nodes, test_acc)
 
 ## Scikit-learn Decision Tree classifier
 
@@ -303,13 +377,13 @@ if argv[1] == '4' or argv[1] == '5':
 
     print '\033[95m'+"Scikit-learn Decision Tree classifier"+'\033[0m'
 
-    criterion = ['entropy'] if argv[2] == 'simple' else ['gini', 'entropy']
-    splitter = ['best'] if argv[2] == 'simple' else ['best', 'random']
+    criterion = ['entropy'] if argv[5] == 'simple' else ['gini', 'entropy']
+    splitter = ['best'] if argv[5] == 'simple' else ['best', 'random']
     max_depth = [1, 5, 7, 10] + [None]
     min_samples_split = [0.001,0.01,0.1,5,10]
     min_samples_leaf = [0.001,0.01,0.1] + [1,5,10]
-    max_features = [None] if argv[2] == 'simple' else [5,10,'sqrt','log2',None]
-    min_impurity_decrease = [0] if argv[2] == 'simple' else [0.001, 0.01, 0.1]
+    max_features = [None] if argv[5] == 'simple' else [5,10,'sqrt','log2',None]
+    min_impurity_decrease = [0] if argv[5] == 'simple' else [0.001, 0.01, 0.1]
     random_state = 0
 
     params = list(itertools.product(criterion,splitter,max_depth,min_samples_split,min_samples_leaf,max_features,min_impurity_decrease))
@@ -322,9 +396,9 @@ if argv[1] == '4' or argv[1] == '5':
 
     if argv[1] == '5':
         print '\033[95m'+"Scikit-learn One-Hot Decision Tree classifier"+'\033[0m'
-        x_train, y_train = giveXY(preProcessDataOneHot, 'credit-cards.train.csv')
-        x_valid, y_valid = giveXY(preProcessDataOneHot, 'credit-cards.val.csv')
-        x_test, y_test = giveXY(preProcessDataOneHot, 'credit-cards.test.csv')
+        x_train, y_train = giveXY(preProcessDataOneHot, argv[2])
+        x_valid, y_valid = giveXY(preProcessDataOneHot, argv[4])
+        x_test, y_test = giveXY(preProcessDataOneHot, argv[3])
         bestTree = dtrees[best]
         bestTree.fit(x_train, y_train)
         print "Train accuracy =", 100*sumEqual(bestTree.predict(x_train), y_train)/y_train.shape[0]
@@ -337,12 +411,12 @@ if argv[1] == '6':
 
     print '\033[95m'+"Scikit-learn Random Forest classifier"+'\033[0m'
 
-    criterion = ['entropy'] if argv[2] == 'simple' else ['gini', 'entropy']
+    criterion = ['entropy'] if argv[5] == 'simple' else ['gini', 'entropy']
     n_estimators = [2, 5, 10, 50]
     max_depth = [1, 5, 7, 10] + [None]
     min_samples_split = [0.001,0.01,0.1,5,10]
     min_samples_leaf = [0.001,0.01,0.1] + [1,5,10]
-    max_features = [None] if argv[2] == 'simple' else [5,10,'sqrt','log2',None]
+    max_features = [None] if argv[5] == 'simple' else [5,10,'sqrt','log2',None]
     bootstrap = [True,False]
     random_state = 0
 
