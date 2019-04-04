@@ -177,14 +177,47 @@ def giveXY(preProcessFunction, filename):
 def sumEqual(a, b):
     sum = 0.0
     for i in range(len(a)):
-        if a[i] == b[i,0]: sum += 1
+        if a[i] == b[i]: sum += 1
     return sum
 
 def printBest(best, dtrees, train_acc, valid_acc, test_acc):
     print "Decision Tree Model =", dtrees[best] 
-    print "Train Accuracy =", train_acc[best]
-    print "Validation Accuracy =", valid_acc[best]
-    print "Test Accuracy =", test_acc[best]
+    print "Train accuracy =", train_acc[best]
+    print "Validation accuracy =", valid_acc[best]
+    print "Test accuracy =", test_acc[best]
+
+def validateParams(params, dtrees):
+    x_train, y_train = giveXY(preProcessData, 'credit-cards.train.csv')
+    x_valid, y_valid = giveXY(preProcessData, 'credit-cards.val.csv')
+    x_test, y_test = giveXY(preProcessData, 'credit-cards.test.csv')
+    train_acc = []; valid_acc = []; test_acc = []
+
+    print "Training", len(dtrees), "Decision Trees"; i = 0
+
+    y_train = y_train.A1; print y_train.shape
+    for tree in dtrees:
+        tree.fit(x_train,y_train)
+        if float(i)/len(dtrees)*100 % 10 == 0:
+            print "Trained", i
+        i += 1
+        train_acc.append(100*sumEqual(tree.predict(x_train), y_train)/y_train.shape[0])
+        valid_acc.append(100*sumEqual(tree.predict(x_valid), y_valid)/y_valid.shape[0])
+        test_acc.append(100*sumEqual(tree.predict(x_test), y_test)/y_test.shape[0])
+
+    params = np.array(params)
+    dtrees = np.array(dtrees)
+    train_acc = np.array(train_acc)
+    valid_acc = np.array(valid_acc)
+    test_acc = np.array(test_acc)
+
+    if not argv[2] == 'simple':
+        best = valid_acc[params[:,0] == 'gini'].argmax()
+        printBest(best, dtrees, train_acc, valid_acc, test_acc)
+
+    best = valid_acc[params[:,0] == 'entropy'].argmax() + int(dtrees.shape[0]/2)
+    printBest(best, dtrees, train_acc, valid_acc, test_acc)
+    return best
+
         
 ## Parsing and preprocessing
 
@@ -285,38 +318,7 @@ if argv[1] == '4' or argv[1] == '5':
     for p in params:
         dtrees.append(DecisionTreeClassifier(criterion=p[0],splitter=p[1],max_depth=p[2],min_samples_split=p[3],min_samples_leaf=p[4],max_features=p[5],min_impurity_decrease=p[6],random_state=random_state))
 
-    x_train, y_train = giveXY(preProcessData, 'credit-cards.train.csv')
-    x_valid, y_valid = giveXY(preProcessData, 'credit-cards.val.csv')
-    x_test, y_test = giveXY(preProcessData, 'credit-cards.test.csv')
-
-    train_acc = []
-    valid_acc = []
-    test_acc = []
-
-    print "Training", len(dtrees), "Decision Trees"; i = 0
-
-    for tree in dtrees:
-        tree.fit(x_train,y_train)
-        if float(i)/len(dtrees)*100 % 10 == 0:
-            print "Trained", i
-        i += 1
-        train_acc.append(100*sumEqual(tree.predict(x_train), y_train)/y_train.shape[0])
-        valid_acc.append(100*sumEqual(tree.predict(x_valid), y_valid)/y_valid.shape[0])
-        test_acc.append(100*sumEqual(tree.predict(x_test), y_test)/y_test.shape[0])
-        
-
-    params = np.array(params)
-    dtrees = np.array(dtrees)
-    train_acc = np.array(train_acc)
-    valid_acc = np.array(valid_acc)
-    test_acc = np.array(test_acc)
-
-    if not argv[2] == 'simple':
-        best = valid_acc[params[:,0] == 'gini'].argmax()
-        printBest(best, dtrees, train_acc, valid_acc, test_acc)
-
-    best = valid_acc[params[:,0] == 'entropy'].argmax() + int(dtrees.shape[0]/2)
-    printBest(best, dtrees, train_acc, valid_acc, test_acc)
+    best = validateParams(params, dtrees)
 
     if argv[1] == '5':
         print '\033[95m'+"Scikit-learn One-Hot Decision Tree classifier"+'\033[0m'
@@ -325,6 +327,29 @@ if argv[1] == '4' or argv[1] == '5':
         x_test, y_test = giveXY(preProcessDataOneHot, 'credit-cards.test.csv')
         bestTree = dtrees[best]
         bestTree.fit(x_train, y_train)
-        print "Training accuracy =", 100*sumEqual(tree.predict(x_train), y_train)/y_train.shape[0]
-        print "Validation accuracy =", 100*sumEqual(tree.predict(x_valid), y_valid)/y_valid.shape[0]
-        print "Test accuracy =", 100*sumEqual(tree.predict(x_test), y_test)/y_test.shape[0]
+        print "Train accuracy =", 100*sumEqual(bestTree.predict(x_train), y_train)/y_train.shape[0]
+        print "Validation accuracy =", 100*sumEqual(bestTree.predict(x_valid), y_valid)/y_valid.shape[0]
+        print "Test accuracy =", 100*sumEqual(bestTree.predict(x_test), y_test)/y_test.shape[0]
+    
+## Scikit-learn Random Forest classifier
+
+if argv[1] == '6':
+
+    print '\033[95m'+"Scikit-learn Random Forest classifier"+'\033[0m'
+
+    criterion = ['entropy'] if argv[2] == 'simple' else ['gini', 'entropy']
+    n_estimators = [2, 5, 10, 50]
+    max_depth = [1, 5, 7, 10] + [None]
+    min_samples_split = [0.001,0.01,0.1,5,10]
+    min_samples_leaf = [0.001,0.01,0.1] + [1,5,10]
+    max_features = [None] if argv[2] == 'simple' else [5,10,'sqrt','log2',None]
+    bootstrap = [True,False]
+    random_state = 0
+
+    params = list(itertools.product(criterion,n_estimators,max_depth,min_samples_split,min_samples_leaf,max_features,bootstrap))
+
+    rforests = []
+    for p in params:
+        rforests.append(RandomForestClassifier(criterion=p[0],n_estimators=p[1],max_depth=p[2],min_samples_split=p[3],min_samples_leaf=p[4],max_features=p[5],bootstrap=p[6],random_state=random_state))
+
+    validateParams(params, rforests)
