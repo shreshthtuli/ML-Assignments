@@ -32,9 +32,9 @@ Test accuracy = 80.6666666667
 Local Data parsing tree
 0 14057.0 3943.0 18000 5
 Nodes =  13826
-Train accuracy = 74.45
-Validation accuracy = 66.3833333333
-Test accuracy = 66.85
+Train accuracy = 99.7888888889
+Validation accuracy = 71.9
+Test accuracy = 72.1666666667
 Attribute X1 split multiple times
 Attribute X2 split multiple times
 Attribute X3 split multiple times
