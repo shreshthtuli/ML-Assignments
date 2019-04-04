@@ -60,3 +60,26 @@ Scikit-learn One-Hot Decision Tree classifier
 Training accuracy = 84.5777777778
 Validation accuracy = 79.2666666667
 Test accuracy = 79.3
+Scikit-learn Random Forest classifier
+Training 1200 Decision Trees
+(18000,)
+Trained 0
+Trained 120
+Trained 240
+Trained 360
+Trained 480
+Trained 600
+Trained 720
+Trained 840
+Trained 960
+Trained 1080
+Decision Tree Model = RandomForestClassifier(bootstrap=False, class_weight=None,
+            criterion='entropy', max_depth=7, max_features=None,
+            max_leaf_nodes=None, min_impurity_decrease=0.0,
+            min_impurity_split=None, min_samples_leaf=0.001,
+            min_samples_split=0.001, min_weight_fraction_leaf=0.0,
+            n_estimators=10, n_jobs=None, oob_score=False, random_state=0,
+            verbose=0, warm_start=False)
+Train accuracy = 83.46666666666667
+Validation accuracy = 80.71666666666667
+Test accuracy = 80.6
