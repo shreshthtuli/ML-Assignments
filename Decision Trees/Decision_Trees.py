@@ -15,6 +15,7 @@ import itertools
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
+from copy import deepcopy
 
 # np.set_printoptions(threshold=np.inf)
 
@@ -48,8 +49,9 @@ def parseData(filename):
     return X
 
 def preProcessData(X):
+    medians = [0]*23
     for i in [0, 4] + range(11, 23):
-        median = np.median(X[:,i], axis=0)
+        median = np.median(X[:,i], axis=0); medians[i] = median
         for j in range(X.shape[0]):
             X[j,i] = 1 if X[j,i] >= median else 0 # Continuous to binary
     for j in range(X.shape[0]):
@@ -57,6 +59,7 @@ def preProcessData(X):
     for i in range(5, 11):
         for j in range(X.shape[0]):
             X[j,i] = X[j,i] + 2
+    return medians
 
 def oneHot(rng, val):
     if rng == 2:
@@ -113,9 +116,9 @@ class Node:
         self.parent = parent
         self.datacopy = Dat
         self.data = np.copy(Dat)
-        self.attributes = attributes
+        self.attributes = attributes; self.medians = []
         if CALC_LOCAL_MEDIAN and self.data.shape[1] != 0:
-            preProcessData(self.data)
+            self.medians = preProcessData(self.data)
         self.attr = None
         self.children = []
         self.pruned = False
@@ -161,12 +164,19 @@ class Node:
         if not self.isLeaf:
             self.split()
         
-    def test(self, dat):
+    def test(self, dat, dat1=[]):            
         if self.isLeaf:
             return self.prediction
         elif self.pruned:
             return self.parent.prediction
         else:
+            if CALC_LOCAL_MEDIAN:
+                index = 0;
+                if self.attr in [0, 4] + range(11, 23):
+                    index = 1 if dat1[self.attr] >= self.medians[self.attr] else 0
+                else:
+                    index = dat[self.attr]
+                return self.children[index].test(dat, dat1)
             return self.children[dat[self.attr]].test(dat)
         
     def numNodes(self):
@@ -180,11 +190,12 @@ class Node:
 
 def Test(tree, filename):
     TestData = parseData(filename)
+    TestDataUnProcessed = np.copy(TestData)
     preProcessData(TestData)
-    TestData = TestData.tolist()
+    TestData = TestData.tolist(); TestDataUnProcesses = TestDataUnProcessed.tolist()
     correct = 0; 
     for i in range(len(TestData)):
-        pred = tree.test(TestData[i])
+        pred = tree.test(TestData[i], TestDataUnProcessed[i])
         actual = TestData[i][-1]
         correct = correct + 1 if pred == actual else correct
     return 100*correct/(len(TestData)+0.0)
