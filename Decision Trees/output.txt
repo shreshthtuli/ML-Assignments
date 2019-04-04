@@ -25,10 +25,34 @@ New validation accuracy = 80.65 by pruning node 14414
 New validation accuracy = 80.6666666667 by pruning node 14526
 New validation accuracy = 80.6833333333 by pruning node 14537
 New validation accuracy = 80.6833333333 by pruning node 2
-New validation accuracy = 80.6833333333 by pruning node 3
+Number of Nodes pruned = 18
+Train accuracy = 83.2388888889
+Validation accuracy = 80.6833333333
+Test accuracy = 80.6666666667
 Local Data parsing tree
 0 14057.0 3943.0 18000 5
 Nodes =  14603
 Train accuracy = 78.1111111111
 Validation accuracy = 76.9833333333
 Test accuracy = 78.1166666667
+Scikit-learn Decision Tree classifier
+Training 300 Decision Trees
+Trained 0
+Trained 30
+Trained 60
+Trained 90
+Trained 120
+Trained 150
+Trained 180
+Trained 210
+Trained 240
+Trained 270
+Decision Tree Model = DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=7,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_decrease=0, min_impurity_split=None,
+            min_samples_leaf=0.001, min_samples_split=0.001,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=0,
+            splitter='best')
+Train Accuracy = 83.46666666666667
+Validation Accuracy = 80.71666666666667
+Test Accuracy = 80.6

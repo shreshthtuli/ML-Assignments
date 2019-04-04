@@ -8,6 +8,10 @@ Machine Learning Model : Decision Trees
 """
 
 import numpy as np
+from sys import argv
+import itertools
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 np.set_printoptions(threshold=np.inf)
 
 MAX_NODES = 100000
@@ -147,6 +151,23 @@ def Validate(tree, TestData):
         actual = TestData[i][-1]
         correct = correct + 1 if pred == actual else correct
     return 100*correct/(len(TestData)+0.0)
+
+def giveXY(filename):
+    Data = parseData(filename)
+    preProcessData(Data)
+    return Data[:,:-1], Data[:,-1]
+
+def sumEqual(a, b):
+    sum = 0.0
+    for i in range(len(a)):
+        if a[i] == b[i,0]: sum += 1
+    return sum
+
+def printBest(best, dtrees, train_acc, valid_acc, test_acc):
+    print "Decision Tree Model =", dtrees[best] 
+    print "Train Accuracy =", train_acc[best]
+    print "Validation Accuracy =", valid_acc[best]
+    print "Test Accuracy =", test_acc[best]
         
 ## Parsing and preprocessing
 
@@ -157,65 +178,125 @@ preProcessData(Data)
 
 ## Training
 
-print '\033[95m'+"Training Decision tree"+'\033[0m'
+if argv[1] == '1':
 
-Tree = Node(None, Data)
-print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
+    print '\033[95m'+"Training Decision tree"+'\033[0m'
 
-print "Nodes = ", NODES
-print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    Tree = Node(None, Data)
+    print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
+
+    print "Nodes = ", NODES
+    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
 
 
 ## Pruning nodes based on validation
 
-print '\033[95m'+"Pruning nodes based on validation accuracy"+'\033[0m'
+if argv[1] == '2':
 
-val = Test(Tree, "credit-cards.val.csv")
-newval = val
+    print '\033[95m'+"Pruning nodes based on validation accuracy"+'\033[0m'
 
-PrunedArray = np.zeros(len(TreeNodes))
-TempArray = np.zeros(len(TreeNodes))
+    val = Test(Tree, "credit-cards.val.csv")
+    newval = val
 
-TestData = parseData("credit-cards.val.csv")
-preProcessData(TestData)
-TestData = TestData.tolist()
-
-while True:
+    PrunedArray = np.zeros(len(TreeNodes))
     TempArray = np.zeros(len(TreeNodes))
-    for i in range(1, len(TreeNodes)):
-        if PrunedArray[i] == 1:
-            continue
-        TreeNodes[i].pruned = True
-        TempArray[i] = Validate(Tree, TestData)
-        TreeNodes[i].pruned = False
-    bestPrune = TempArray.argmax()
-    TreeNodes[bestPrune].pruned = True
-    val = newval
-    newval = Validate(Tree, TestData)
-    print "New validation accuracy =", newval, "by pruning node", bestPrune
-    if newval <= val:
-        TreeNodes[bestPrune].pruned = False; break
-    PrunedArray[bestPrune] = 1
 
-print "Number of Nodes pruned =", np.count_nonzero(PrunedArray)
-print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    TestData = parseData("credit-cards.val.csv")
+    preProcessData(TestData)
+    TestData = TestData.tolist()
+
+    while True:
+        TempArray = np.zeros(len(TreeNodes))
+        for i in range(1, len(TreeNodes)):
+            if PrunedArray[i] == 1:
+                continue
+            TreeNodes[i].pruned = True
+            TempArray[i] = Validate(Tree, TestData)
+            TreeNodes[i].pruned = False
+        bestPrune = TempArray.argmax()
+        TreeNodes[bestPrune].pruned = True
+        val = newval
+        newval = Validate(Tree, TestData)
+        print "New validation accuracy =", newval, "by pruning node", bestPrune
+        if newval <= val:
+            TreeNodes[bestPrune].pruned = False; break
+        PrunedArray[bestPrune] = 1
+
+    print "Number of Nodes pruned =", np.count_nonzero(PrunedArray)
+    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
 
 
 ## Local median calculation
 
-Data = parseData('credit-cards.train.csv')
-CALC_LOCAL_MEDIAN = True
+if argv[1] == '3':
 
-print '\033[95m'+"Local Data parsing tree"+'\033[0m'
+    Data = parseData('credit-cards.train.csv')
+    CALC_LOCAL_MEDIAN = True
 
-Tree = Node(None, Data)
-print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
+    print '\033[95m'+"Local Data parsing tree"+'\033[0m'
 
-print "Nodes = ", NODES
-print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
-print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
-print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+    Tree = Node(None, Data)
+    print Tree.prediction, Tree.zeros, Tree.ones, Tree.data.shape[0], Tree.attr
+
+    print "Nodes = ", NODES
+    print "Train accuracy =", Test(Tree, "credit-cards.train.csv")
+    print "Validation accuracy =", Test(Tree, "credit-cards.val.csv")
+    print "Test accuracy =", Test(Tree, "credit-cards.test.csv")
+
+## Scikit-learn Decision Tree classifier
+
+if argv[1] == '4':
+
+    print '\033[95m'+"Scikit-learn Decision Tree classifier"+'\033[0m'
+
+    criterion = ['entropy'] if argv[2] == 'simple' else ['gini', 'entropy']
+    splitter = ['best'] if argv[2] == 'simple' else ['best', 'random']
+    max_depth = [1, 5, 7, 10] + [None]
+    min_samples_split = [0.001,0.01,0.1,5,10]
+    min_samples_leaf = [0.001,0.01,0.1] + [1,5,10]
+    max_features = [None] if argv[2] == 'simple' else [5,10,'sqrt','log2',None]
+    min_impurity_decrease = [0] if argv[2] == 'simple' else [0.001, 0.01, 0.1]
+    random_state = 0
+
+    params = list(itertools.product(criterion,splitter,max_depth,min_samples_split,min_samples_leaf,max_features,min_impurity_decrease))
+
+    dtrees = []
+    for p in params:
+        dtrees.append(DecisionTreeClassifier(criterion=p[0],splitter=p[1],max_depth=p[2],min_samples_split=p[3],min_samples_leaf=p[4],max_features=p[5],min_impurity_decrease=p[6],random_state=random_state))
+
+    x_train, y_train = giveXY('credit-cards.train.csv')
+    x_valid, y_valid = giveXY('credit-cards.val.csv')
+    x_test, y_test = giveXY('credit-cards.test.csv')
+
+    train_acc = []
+    valid_acc = []
+    test_acc = []
+
+    print "Training", len(dtrees), "Decision Trees"; i = 0
+
+    for tree in dtrees:
+        tree.fit(x_train,y_train)
+        if float(i)/len(dtrees)*100 % 10 == 0:
+            print "Trained", i
+        i += 1
+        train_acc.append(100*sumEqual(tree.predict(x_train), y_train)/y_train.shape[0])
+        valid_acc.append(100*sumEqual(tree.predict(x_valid), y_valid)/y_valid.shape[0])
+        test_acc.append(100*sumEqual(tree.predict(x_test), y_test)/y_test.shape[0])
+        
+
+    params = np.array(params)
+    dtrees = np.array(dtrees)
+    train_acc = np.array(train_acc)
+    valid_acc = np.array(valid_acc)
+    test_acc = np.array(test_acc)
+
+    if not argv[2] == 'simple':
+        best = valid_acc[params[:,0] == 'gini'].argmax()
+        printBest(best, dtrees, train_acc, valid_acc, test_acc)
+
+    best = valid_acc[params[:,0] == 'entropy'].argmax() + int(dtrees.shape[0]/2)
+    printBest(best, dtrees, train_acc, valid_acc, test_acc)
