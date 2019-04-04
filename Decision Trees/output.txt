@@ -36,23 +36,27 @@ Train accuracy = 78.1111111111
 Validation accuracy = 76.9833333333
 Test accuracy = 78.1166666667
 Scikit-learn Decision Tree classifier
-Training 300 Decision Trees
+Training 150 Decision Trees
 Trained 0
+Trained 15
 Trained 30
+Trained 45
 Trained 60
+Trained 75
 Trained 90
+Trained 105
 Trained 120
-Trained 150
-Trained 180
-Trained 210
-Trained 240
-Trained 270
-Decision Tree Model = DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=7,
+Trained 135
+Decision Tree Model = DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
             max_features=None, max_leaf_nodes=None,
             min_impurity_decrease=0, min_impurity_split=None,
-            min_samples_leaf=0.001, min_samples_split=0.001,
+            min_samples_leaf=1, min_samples_split=0.1,
             min_weight_fraction_leaf=0.0, presort=False, random_state=0,
             splitter='best')
-Train Accuracy = 83.46666666666667
-Validation Accuracy = 80.71666666666667
-Test Accuracy = 80.6
+Train Accuracy = 82.86666666666666
+Validation Accuracy = 80.35
+Test Accuracy = 80.85
+Scikit-learn One-Hot Decision Tree classifier
+Training accuracy = 84.5777777778
+Validation accuracy = 79.2666666667
+Test accuracy = 79.3

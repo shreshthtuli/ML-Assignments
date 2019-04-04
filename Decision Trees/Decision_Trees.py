@@ -21,6 +21,18 @@ CALC_LOCAL_MEDIAN = False
 
 TreeNodes = []
 
+def values(attribute):
+    values = []
+    if attribute == 2: # Education
+        values = range(7)
+    elif attribute == 3: # marital status
+        values = range(4)
+    elif attribute in range(5, 11): # Repayment status
+        values = range(12)
+    else: # Binary or conitunuous
+        values = range(2)
+    return values
+
 def parseData(filename):
     file = open(filename, "r")
     lines = file.readlines()
@@ -39,6 +51,23 @@ def preProcessData(X):
         for j in range(X.shape[0]):
             X[j,i] = X[j,i] + 2
 
+def oneHot(rng, val):
+    if rng == 2:
+        return val
+    lst = [0] * rng;
+    lst[val] = 1
+    return lst
+
+def preProcessDataOneHot(X):
+    preProcessData(X)
+    res = []
+    for i in range(X.shape[0]):
+        a = []
+        for j in range(X.shape[1]):
+            a.append(oneHot(len(values(X[i,j])), X[i,j]))
+        res.append(a)
+    X = np.matrix(res)
+
 def plogp(num, den):
     return 0 if num == 0 else (num/den)*np.log2(num/den)
 
@@ -55,18 +84,6 @@ def getEntropy(D, attr, val):
     entropy = - plogp(ones, zeros+ones) \
               - plogp(zeros, zeros+ones)
     return prob, entropy
-
-def values(attribute):
-    values = []
-    if attribute == 2: # Education
-        values = range(7)
-    elif attribute == 3: # marital status
-        values = range(4)
-    elif attribute in range(5, 11): # Repayment status
-        values = range(12)
-    else: # Binary or conitunuous
-        values = range(2)
-    return values
 
 def extract(D, attr, val):
     dret = []
@@ -152,9 +169,9 @@ def Validate(tree, TestData):
         correct = correct + 1 if pred == actual else correct
     return 100*correct/(len(TestData)+0.0)
 
-def giveXY(filename):
+def giveXY(preProcessFunction, filename):
     Data = parseData(filename)
-    preProcessData(Data)
+    preProcessFunction(Data)
     return Data[:,:-1], Data[:,-1]
 
 def sumEqual(a, b):
@@ -249,7 +266,7 @@ if argv[1] == '3':
 
 ## Scikit-learn Decision Tree classifier
 
-if argv[1] == '4':
+if argv[1] == '4' or argv[1] == '5':
 
     print '\033[95m'+"Scikit-learn Decision Tree classifier"+'\033[0m'
 
@@ -268,9 +285,9 @@ if argv[1] == '4':
     for p in params:
         dtrees.append(DecisionTreeClassifier(criterion=p[0],splitter=p[1],max_depth=p[2],min_samples_split=p[3],min_samples_leaf=p[4],max_features=p[5],min_impurity_decrease=p[6],random_state=random_state))
 
-    x_train, y_train = giveXY('credit-cards.train.csv')
-    x_valid, y_valid = giveXY('credit-cards.val.csv')
-    x_test, y_test = giveXY('credit-cards.test.csv')
+    x_train, y_train = giveXY(preProcessData, 'credit-cards.train.csv')
+    x_valid, y_valid = giveXY(preProcessData, 'credit-cards.val.csv')
+    x_test, y_test = giveXY(preProcessData, 'credit-cards.test.csv')
 
     train_acc = []
     valid_acc = []
@@ -300,3 +317,14 @@ if argv[1] == '4':
 
     best = valid_acc[params[:,0] == 'entropy'].argmax() + int(dtrees.shape[0]/2)
     printBest(best, dtrees, train_acc, valid_acc, test_acc)
+
+    if argv[1] == '5':
+        print '\033[95m'+"Scikit-learn One-Hot Decision Tree classifier"+'\033[0m'
+        x_train, y_train = giveXY(preProcessDataOneHot, 'credit-cards.train.csv')
+        x_valid, y_valid = giveXY(preProcessDataOneHot, 'credit-cards.val.csv')
+        x_test, y_test = giveXY(preProcessDataOneHot, 'credit-cards.test.csv')
+        bestTree = dtrees[best]
+        bestTree.fit(x_train, y_train)
+        print "Training accuracy =", 100*sumEqual(tree.predict(x_train), y_train)/y_train.shape[0]
+        print "Validation accuracy =", 100*sumEqual(tree.predict(x_valid), y_valid)/y_valid.shape[0]
+        print "Test accuracy =", 100*sumEqual(tree.predict(x_test), y_test)/y_test.shape[0]
