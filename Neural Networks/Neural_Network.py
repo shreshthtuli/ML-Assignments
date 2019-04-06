@@ -205,7 +205,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 100, True)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
@@ -228,7 +228,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units, units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 100, True)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
