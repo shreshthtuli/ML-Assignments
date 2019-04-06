@@ -135,9 +135,9 @@ class NeuralNet():
     def predict(self, x):
         return self.forward(x).argmax()
     
-    def fit(self, x_train, y_train, eta, epochs, batchsize=1):
-        batches = int(x_train.shape[0]/batchsize)
-        costArr = []; totalCost = 0
+    def fit(self, x_train, y_train, eta2, epochs, batchsize=1, adaptive=False):
+        batches = int(x_train.shape[0]/batchsize); eta = eta2
+        costArr = []; totalCost = 0; prevCost = 0; last = False
         for e in range(epochs):
             totalCost = 0
             for i in range(batches):
@@ -145,6 +145,12 @@ class NeuralNet():
                 self.backprop(y_train[i*batchsize:(i+1)*batchsize], eta)
                 totalCost +=  (np.linalg.norm(y_train[i*batchsize:(i+1)*batchsize] - self.layers[-1].out)**2).sum()/(2*batchsize)
             # print "Cost:", totalCost, "Epoch:", e; 
+            if adaptive and totalCost > prevCost + 0.0001: 
+                if last: eta = eta/5
+                else: last = True
+            if adaptive and totalCost <= prevCost + 0.0001:
+                last = False
+            prevCost = totalCost
             if sumDifference(costArr, e) < 0.1 and e > 10: print "Epochs =", e; break;
             costArr.append(totalCost)
         return costArr
@@ -192,7 +198,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units])
-    graph = nn.fit(x_train, y_train, 0.1, 1000, 10)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
@@ -213,7 +219,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units, units])
-    graph = nn.fit(x_train, y_train, 0.1, 1000, 10)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
