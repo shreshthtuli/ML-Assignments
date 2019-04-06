@@ -49,7 +49,8 @@ def preProcessFile(readFile, storeFile):
 
 def activation(x):
     if SIGMOID: return 1.0 / (1.0 + np.exp(-x))
-    return max(0, x) # ReLU
+    x[x <= 0] = 0
+    return x # ReLU
 
 def sumDifference(arr, e):
     sum = 0
@@ -192,6 +193,8 @@ y_test = testData[:,-10:]
 test = [5,10,15,20,25]
 train_acc = []; test_acc = []; t = []
 
+SIGMOID = False
+
 print '\033[95m'+"Single hidden layer testing"+'\033[0m'
 
 for units in test:
@@ -214,6 +217,8 @@ plotGraph("Test accuracy with nodes (Single hidden layer)", "Test accuracy %", t
 plotGraph("Time with nodes (Single hidden layer)", "Time in seconds", test, t)
 
 print '\033[95m'+"Two hidden layers testing"+'\033[0m'
+
+train_acc = []; test_acc = []; t = []
 
 for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
