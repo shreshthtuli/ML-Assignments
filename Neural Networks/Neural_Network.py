@@ -48,9 +48,12 @@ def preProcessFile(readFile, storeFile):
     storeMatrix(res, storeFile)
 
 def activation(x):
-    if SIGMOID: np.clip(x, -10, 10); return 1.0 / (1.0 + np.exp(-x))
-    x[x <= 0] = 0; np.clip(x, -10, 10);
+    if SIGMOID: return 1.0 / (1.0 + np.exp(-x))
+    x[x <= 0] = 0
     return x # ReLU
+
+def finalActivation(x):
+    return 1.0 / (1.0 + np.exp(-x))
 
 def sumDifference(arr, e):
     sum = 0
@@ -119,19 +122,18 @@ class NeuralNet():
         for idx in range(1,len(self.layers)-1):
             self.layers[idx].out = activation(np.dot(self.layers[idx-1].out,self.layers[idx].w))
             self.layers[idx].out = np.concatenate((np.ones((self.layers[idx].out.shape[0],1)),self.layers[idx].out),axis=1)
-        self.layers[-1].out = activation(np.dot(self.layers[-2].out,self.layers[-1].w))
+        self.layers[-1].out = finalActivation(np.dot(self.layers[-2].out,self.layers[-1].w))
         return self.layers[-1].out
     
     def backprop(self, y, eta):
         for idx, layer in enumerate(self.layers[::-1]):
             if(idx == 0):
                 layer.delta = -1 * np.multiply((y - layer.out), self.sigmoidPrime(layer.out))
-                layer.delta = np.clip(layer.delta, -10, 10)
                 # print "Last layer:", y, "\n",  layer.out, "\n", -layer.delta
             else:
                 next_layer = self.layers[-idx]
                 layer.delta = np.multiply(next_layer.delta.dot(next_layer.w[1:,:].T), self.activationDer(layer.out[:,1:]))
-                layer.delta = np.clip(layer.delta, -10, 10)
+            if not SIGMOID: layer.delta = np.clip(layer.delta, -10, 10)
         for idx in range(1,len(self.layers)):
             self.layers[idx].w -= eta * self.layers[idx-1].out.T.dot(self.layers[idx].delta)
 
@@ -147,7 +149,7 @@ class NeuralNet():
                 self.forward(x_train[i*batchsize:(i+1)*batchsize])
                 self.backprop(y_train[i*batchsize:(i+1)*batchsize], eta)
                 totalCost +=  (np.linalg.norm(y_train[i*batchsize:(i+1)*batchsize] - self.layers[-1].out)**2).sum()/(2*batchsize)
-            print "Cost:", totalCost, "Epoch:", e; 
+            # print "Cost:", totalCost, "Epoch:", e; 
             if adaptive and totalCost > prevCost + 0.0001: 
                 if last: eta = eta/5
                 else: last = True
