@@ -317,3 +317,100 @@ Time =  256.090138197
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::ReLU::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Parsing data
+Single hidden layer testing
+Number of nodes = 5
+Neural_Network.py:132: RuntimeWarning: invalid value encountered in multiply
+  layer.delta = np.multiply(next_layer.delta.dot(next_layer.w[1:,:].T), self.activationDer(layer.out[:,1:]))
+Neural_Network.py:52: RuntimeWarning: invalid value encountered in less_equal
+  x[x <= 0] = 0
+Neural_Network.py:115: RuntimeWarning: invalid value encountered in greater
+  return np.array(s > 0)
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  79.4660279751
+Number of nodes = 10
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  83.8279249668
+Number of nodes = 15
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  94.1733319759
+Number of nodes = 20
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  92.5980148315
+Number of nodes = 25
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  102.760409117
+Two hidden layers testing
+Number of nodes = 5
+Neural_Network.py:111: RuntimeWarning: overflow encountered in multiply
+  return np.multiply(s, 1-s)
+[[501209      0      0      0      0      0      0      0      0      0]
+ [422498      0      0      0      0      0      0      0      0      0]
+ [ 47622      0      0      0      0      0      0      0      0      0]
+ [ 21121      0      0      0      0      0      0      0      0      0]
+ [  3885      0      0      0      0      0      0      0      0      0]
+ [  1996      0      0      0      0      0      0      0      0      0]
+ [  1424      0      0      0      0      0      0      0      0      0]
+ [   230      0      0      0      0      0      0      0      0      0]
+ [    12      0      0      0      0      0      0      0      0      0]
+ [     3      0      0      0      0      0      0      0      0      0]]
+Training accuracy =  49.9520191923
+Test accuracy =  50.1209
+Time =  103.272320032
+Number of nodes = 10

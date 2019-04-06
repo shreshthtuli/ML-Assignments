@@ -48,8 +48,8 @@ def preProcessFile(readFile, storeFile):
     storeMatrix(res, storeFile)
 
 def activation(x):
-    if SIGMOID: return 1.0 / (1.0 + np.exp(-x))
-    x[x <= 0] = 0
+    if SIGMOID: np.clip(x, -10, 10); return 1.0 / (1.0 + np.exp(-x))
+    x[x <= 0] = 0; np.clip(x, -10, 10);
     return x # ReLU
 
 def sumDifference(arr, e):
@@ -126,10 +126,12 @@ class NeuralNet():
         for idx, layer in enumerate(self.layers[::-1]):
             if(idx == 0):
                 layer.delta = -1 * np.multiply((y - layer.out), self.sigmoidPrime(layer.out))
+                layer.delta = np.clip(layer.delta, -10, 10)
                 # print "Last layer:", y, "\n",  layer.out, "\n", -layer.delta
             else:
                 next_layer = self.layers[-idx]
                 layer.delta = np.multiply(next_layer.delta.dot(next_layer.w[1:,:].T), self.activationDer(layer.out[:,1:]))
+                layer.delta = np.clip(layer.delta, -10, 10)
         for idx in range(1,len(self.layers)):
             self.layers[idx].w -= eta * self.layers[idx-1].out.T.dot(self.layers[idx].delta)
 
@@ -145,7 +147,7 @@ class NeuralNet():
                 self.forward(x_train[i*batchsize:(i+1)*batchsize])
                 self.backprop(y_train[i*batchsize:(i+1)*batchsize], eta)
                 totalCost +=  (np.linalg.norm(y_train[i*batchsize:(i+1)*batchsize] - self.layers[-1].out)**2).sum()/(2*batchsize)
-            # print "Cost:", totalCost, "Epoch:", e; 
+            print "Cost:", totalCost, "Epoch:", e; 
             if adaptive and totalCost > prevCost + 0.0001: 
                 if last: eta = eta/5
                 else: last = True
@@ -201,7 +203,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 100, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
@@ -224,7 +226,7 @@ for units in test:
     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
     start = time()
     nn = NeuralNet(x_train.shape[1], 10, [units, units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
+    graph = nn.fit(x_train, y_train, 0.1, 2000, 100, True)
     t.append(time()-start)
     train_acc.append(nn.accuracy(x_train, y_train))
     test_acc.append(nn.accuracy(x_test, y_test, True))
