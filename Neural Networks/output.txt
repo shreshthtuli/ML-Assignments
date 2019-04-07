@@ -395,6 +395,8 @@ Epochs = 304
 Training accuracy =  90.2079168333
 Test accuracy =  86.6554
 Time =  89.152739048
+
+
 Two hidden layers testing
 Number of nodes = 5
 Epochs = 156
