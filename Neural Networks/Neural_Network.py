@@ -21,6 +21,21 @@ import csv
 
 SIGMOID = True
 
+def parseConfigs(filename):
+    file = open(filename, "r")
+    inp = int(file.readline())
+    out = int(file.readline())
+    batch = int(file.readline())
+    N = int(file.readline()); 
+    layers = map(int, file.readline().strip().split())
+    if file.readline().strip() == "relu":
+        SIGMOID = False
+    else: SIGMOID = True
+    adaptive = True
+    if file.readline().strip() == "fixed":
+        adaptive = False
+    return inp, out, batch, layers, adaptive
+    
 def parseData(filename):
     file = open(filename, "r")
     return np.matrix([map(int, line.strip().split(',')) for line in file.readlines()])
@@ -177,70 +192,82 @@ class NeuralNet():
 if argv[1] == '0':
     print '\033[95m'+"Parsing and preprocessing data"+'\033[0m'
 
-    preProcessFile("poker-hand-training-true.data", "train.data")
-    preProcessFile("poker-hand-testing.data", "test.data")
+    preProcessFile(argv[2], argv[4])
+    preProcessFile(argv[3], argv[5])
+    exit(0)
 
 
 # Neural Network
 
 print '\033[95m'+"Parsing data"+'\033[0m'
 
-Data = parseData("train.data")
-testData = parseData("test.data")
+inp, out, batch, layers, lr = parseConfigs(argv[2])
 
-x_train = Data[:,:-10]
-y_train = Data[:,-10:]
+Data = parseData(argv[3])
+testData = parseData(argv[4])
 
-x_test = testData[:,:-10]
-y_test = testData[:,-10:]
+x_train = Data[:,:-1*out]
+y_train = Data[:,-1*out:]
 
-test = [5,10,15,20,25]
-train_acc = []; test_acc = []; t = []
+x_test = testData[:,:-1*out]
+y_test = testData[:,-1*out:]
 
-SIGMOID = False
 
-print '\033[95m'+"Single hidden layer testing"+'\033[0m'
+nn = NeuralNet(x_train.shape[1], out, layers)
+graph = nn.fit(x_train, y_train, 0.1, 2000, batch, lr)
+print "Training accuracy = ", nn.accuracy(x_train, y_train)
+testacc = nn.accuracy(x_test, y_test, True)
+print "Test accuracy = ", testacc
+plt.savefig("Confusion-Matrix "+str(layers)+".png")
+plt.clf()
 
-for units in test:
-    print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
-    start = time()
-    nn = NeuralNet(x_train.shape[1], 10, [units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
-    t.append(time()-start)
-    train_acc.append(nn.accuracy(x_train, y_train))
-    test_acc.append(nn.accuracy(x_test, y_test, True))
-    plt.savefig("Confusion-Matrix "+"Single layer with nodes = "+str(units))
-    plt.clf()
-    print "Training accuracy = ", train_acc[-1]
-    print "Test accuracy = ", test_acc[-1]
-    print "Time = ", t[-1]
-    plotCost(graph, "Single layer with nodes = "+str(units))
+# test = [5,10,15,20,25]
+# train_acc = []; test_acc = []; t = []
 
-plotGraph("Training accuracy with nodes (Single hidden layer)", "Training accuracy %", test, train_acc)
-plotGraph("Test accuracy with nodes (Single hidden layer)", "Test accuracy %", test, test_acc)
-plotGraph("Time with nodes (Single hidden layer)", "Time in seconds", test, t)
+# SIGMOID = False
 
-print '\033[95m'+"Two hidden layers testing"+'\033[0m'
+# print '\033[95m'+"Single hidden layer testing"+'\033[0m'
 
-train_acc = []; test_acc = []; t = []
+# for units in test:
+#     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
+#     start = time()
+#     nn = NeuralNet(x_train.shape[1], 10, [units])
+#     graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
+#     t.append(time()-start)
+#     train_acc.append(nn.accuracy(x_train, y_train))
+#     test_acc.append(nn.accuracy(x_test, y_test, True))
+#     plt.savefig("Confusion-Matrix "+"Single layer with nodes = "+str(units))
+#     plt.clf()
+#     print "Training accuracy = ", train_acc[-1]
+#     print "Test accuracy = ", test_acc[-1]
+#     print "Time = ", t[-1]
+#     plotCost(graph, "Single layer with nodes = "+str(units))
 
-for units in test:
-    print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
-    start = time()
-    nn = NeuralNet(x_train.shape[1], 10, [units, units])
-    graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
-    t.append(time()-start)
-    train_acc.append(nn.accuracy(x_train, y_train))
-    test_acc.append(nn.accuracy(x_test, y_test, True))
-    plt.savefig("Confusion-Matrix "+"Two layer with nodes = "+str(units))
-    plt.clf()
-    print "Training accuracy = ", train_acc[-1]
-    print "Test accuracy = ", test_acc[-1]
-    print "Time = ", t[-1]
-    plotCost(graph, "Two layer with nodes = "+str(units))
+# plotGraph("Training accuracy with nodes (Single hidden layer)", "Training accuracy %", test, train_acc)
+# plotGraph("Test accuracy with nodes (Single hidden layer)", "Test accuracy %", test, test_acc)
+# plotGraph("Time with nodes (Single hidden layer)", "Time in seconds", test, t)
 
-plotGraph("Training accuracy with nodes (Two hidden layers)", "Training accuracy %", test, train_acc)
-plotGraph("Test accuracy with nodes (Two hidden layers)", "Test accuracy %", test, test_acc)
-plotGraph("Time with nodes (Two hidden layers)", "Time in seconds", test, t)
+# print '\033[95m'+"Two hidden layers testing"+'\033[0m'
+
+# train_acc = []; test_acc = []; t = []
+
+# for units in test:
+#     print '\033[94m'+"Number of nodes = "+str(units)+'\033[0m'
+#     start = time()
+#     nn = NeuralNet(x_train.shape[1], 10, [units, units])
+#     graph = nn.fit(x_train, y_train, 0.1, 2000, 10, True)
+#     t.append(time()-start)
+#     train_acc.append(nn.accuracy(x_train, y_train))
+#     test_acc.append(nn.accuracy(x_test, y_test, True))
+#     plt.savefig("Confusion-Matrix "+"Two layer with nodes = "+str(units))
+#     plt.clf()
+#     print "Training accuracy = ", train_acc[-1]
+#     print "Test accuracy = ", test_acc[-1]
+#     print "Time = ", t[-1]
+#     plotCost(graph, "Two layer with nodes = "+str(units))
+
+# plotGraph("Training accuracy with nodes (Two hidden layers)", "Training accuracy %", test, train_acc)
+# plotGraph("Test accuracy with nodes (Two hidden layers)", "Test accuracy %", test, test_acc)
+# plotGraph("Time with nodes (Two hidden layers)", "Time in seconds", test, t)
 
 
