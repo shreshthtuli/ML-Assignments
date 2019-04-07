@@ -1,0 +1,1 @@
+python Decision_Trees.py $1 $2 $3 $4 simple

@@ -1,0 +1,109 @@
+Parsing and preprocessing training data
+Training Decision tree
+0 14057.0 3943.0 18000 5
+Nodes =  14542
+Train accuracy = 94.6444444444
+Validation accuracy = 74.5333333333
+Test accuracy = 74.8833333333
+Pruning nodes based on validation accuracy
+New validation accuracy = 77.2333333333 by pruning node 4379
+New validation accuracy = 78.6166666667 by pruning node 1189
+New validation accuracy = 79.1666666667 by pruning node 9586
+New validation accuracy = 79.6833333333 by pruning node 1
+New validation accuracy = 80.15 by pruning node 13488
+New validation accuracy = 80.3666666667 by pruning node 12527
+New validation accuracy = 80.4166666667 by pruning node 12418
+New validation accuracy = 80.4666666667 by pruning node 14322
+New validation accuracy = 80.5 by pruning node 12494
+New validation accuracy = 80.5333333333 by pruning node 14172
+New validation accuracy = 80.5666666667 by pruning node 14513
+New validation accuracy = 80.5833333333 by pruning node 12369
+New validation accuracy = 80.6 by pruning node 12413
+New validation accuracy = 80.6166666667 by pruning node 12504
+New validation accuracy = 80.6333333333 by pruning node 14071
+New validation accuracy = 80.65 by pruning node 14414
+New validation accuracy = 80.6666666667 by pruning node 14526
+New validation accuracy = 80.6833333333 by pruning node 14537
+New validation accuracy = 80.6833333333 by pruning node 2
+Number of Nodes pruned = 18
+Train accuracy = 83.2388888889
+Validation accuracy = 80.6833333333
+Test accuracy = 80.6666666667
+Local Data parsing tree
+0 14057.0 3943.0 18000 5
+Nodes =  13826
+Train accuracy = 99.7888888889
+Validation accuracy = 71.9
+Test accuracy = 72.1666666667
+Attribute X1 split multiple times
+Attribute X2 split multiple times
+Attribute X3 split multiple times
+Attribute X4 split multiple times
+Attribute X5 split multiple times
+Attribute X6 split multiple times
+Attribute X7 split multiple times
+Attribute X8 split multiple times
+Attribute X9 split multiple times
+Attribute X10 split multiple times
+Attribute X11 split multiple times
+Attribute X12 split multiple times
+Attribute X13 split multiple times
+Attribute X14 split multiple times
+Attribute X15 split multiple times
+Attribute X16 split multiple times
+Attribute X17 split multiple times
+Attribute X18 split multiple times
+Attribute X19 split multiple times
+Attribute X20 split multiple times
+Attribute X21 split multiple times
+Attribute X22 split multiple times
+Attribute X23 split multiple times
+Max number of times split by X1, X2, ... , X23:
+[1156, 285, 175, 229, 680, 1, 53, 87, 66, 98, 98, 286, 110, 102, 109, 98, 84, 103, 101, 94, 83, 61, 72]
+Scikit-learn Decision Tree classifier
+Training 150 Decision Trees
+Trained 0
+Trained 15
+Trained 30
+Trained 45
+Trained 60
+Trained 75
+Trained 90
+Trained 105
+Trained 120
+Trained 135
+Decision Tree Model = DecisionTreeClassifier(class_weight=None, criterion='entropy', max_depth=None,
+            max_features=None, max_leaf_nodes=None,
+            min_impurity_decrease=0, min_impurity_split=None,
+            min_samples_leaf=1, min_samples_split=0.1,
+            min_weight_fraction_leaf=0.0, presort=False, random_state=0,
+            splitter='best')
+Train Accuracy = 82.86666666666666
+Validation Accuracy = 80.35
+Test Accuracy = 80.85
+Scikit-learn One-Hot Decision Tree classifier
+Training accuracy = 84.5777777778
+Validation accuracy = 79.2666666667
+Test accuracy = 79.3
+Scikit-learn Random Forest classifier
+Training 1200 Decision Trees
+Trained 0
+Trained 120
+Trained 240
+Trained 360
+Trained 480
+Trained 600
+Trained 720
+Trained 840
+Trained 960
+Trained 1080
+Decision Tree Model = RandomForestClassifier(bootstrap=False, class_weight=None,
+            criterion='entropy', max_depth=7, max_features=None,
+            max_leaf_nodes=None, min_impurity_decrease=0.0,
+            min_impurity_split=None, min_samples_leaf=0.001,
+            min_samples_split=0.001, min_weight_fraction_leaf=0.0,
+            n_estimators=10, n_jobs=None, oob_score=False, random_state=0,
+            verbose=0, warm_start=False)
+Train accuracy = 83.46666666666667
+Validation accuracy = 80.71666666666667
+Test accuracy = 80.6
